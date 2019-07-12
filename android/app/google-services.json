@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "243914948243",
+    "firebase_url": "https://perify-ebc9a.firebaseio.com",
+    "project_id": "perify-ebc9a",
+    "storage_bucket": "perify-ebc9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243914948243:android:02d88aab4ed229a1",
+        "android_client_info": {
+          "package_name": "com.perify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "243914948243-7290om99scj0hdo12ddmm6jsr1fcadbt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.perify",
+            "certificate_hash": "4d28286bfe2ba7740f70d48de39e3552911eb53b"
+          }
+        },
+        {
+          "client_id": "243914948243-iccp21r6lbo54v9s034j07u6vb5duqcv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE4sPHh0A_M5CZlufcqEzGjcuDXeVh4uc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "243914948243-iccp21r6lbo54v9s034j07u6vb5duqcv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
