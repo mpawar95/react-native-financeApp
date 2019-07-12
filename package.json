@@ -1,0 +1,47 @@
+{
+  "name": "PeriFY",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "clear-watch": "watchman watch-del-all && watchman shutdown-server"
+  },
+  "dependencies": {
+    "moment": "^2.24.0",
+    "native-base": "^2.12.1",
+    "react": "16.8.3",
+    "react-native": "^0.59.9",
+    "react-native-action-button": "^2.8.5",
+    "react-native-app-intro-slider": "^2.0.1",
+    "react-native-calendar-picker": "^6.0.1",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-elements": "^1.1.0",
+    "react-native-firebase": "^5.4.2",
+    "react-native-gesture-handler": "^1.3.0",
+    "react-native-material-ripple": "^0.8.0",
+    "react-native-modal-dropdown": "^0.6.2",
+    "react-native-pie": "^0.5.0",
+    "react-native-pie-chart": "^1.0.13",
+    "react-native-segmented-control-tab": "^3.4.0",
+    "react-native-simple-dialogs": "^1.1.0",
+    "react-native-splash-screen": "^3.2.0",
+    "react-native-vector-icons": "^6.4.2",
+    "react-navigation": "^3.11.0",
+    "react-redux": "^7.0.3",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "rn-viewpager": "^1.2.9"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.5",
+    "@babel/runtime": "7.4.5",
+    "babel-jest": "24.8.0",
+    "jest": "24.8.0",
+    "metro-react-native-babel-preset": "0.54.1",
+    "react-test-renderer": "16.8.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
