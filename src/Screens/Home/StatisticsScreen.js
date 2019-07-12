@@ -62,9 +62,7 @@ class StatisticsScreen extends Component {
             headerLeft: (
                 <Ripple onPress={() => navigator.pop()}>
                     <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
-                        <View style={{}}>
-                            <Icon name="arrow-back" size={22} />
-                        </View>
+                        <Icon name="arrow-back" size={22} />
                     </View>
                 </Ripple>
             ),

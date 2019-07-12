@@ -7,7 +7,8 @@ import {
     ScrollView,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    Platform
+    Platform,
+    Keyboard
 } from 'react-native';
 import { AddNewAccount, ColorPickerDialog,BottomButton } from '../../Components';
 import { Icon } from "react-native-elements";
@@ -68,6 +69,7 @@ class EditAccountScreen extends Component {
         this.state.selected_color ? this.props.onPressColorPickerVisible(false) : ""
     }
     _onColorPress = () => {
+        Keyboard.dismiss()
         this.props.onPressColorPickerVisible(true)
     }
     onItemPress = (item) => {
@@ -121,7 +123,7 @@ class EditAccountScreen extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }} onStartShouldSetResponder={(evt) => Keyboard.dismiss()}>
                 <AddNewAccount
                     accountPlaceHolder="Account name"
                     BalancePlaceHolder="Initial Balance"

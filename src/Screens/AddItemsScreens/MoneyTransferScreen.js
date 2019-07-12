@@ -5,13 +5,13 @@ import {
     Text,
     View,
     ScrollView,
-    TouchableWithoutFeedback,
     FlatList,
     Platform,
     TouchableOpacity,
+    Keyboard
 } from 'react-native';
 import { Icon } from 'react-native-elements'
-import { DrawerItems, SafeAreaView } from 'react-navigation';
+import { SafeAreaView } from 'react-navigation';
 import { Input,DatePicker,BottomButton } from '../../Components';
 import Ripple from 'react-native-material-ripple';
 import {
@@ -115,7 +115,7 @@ class MoneyTransferScreen extends Component {
             <View>
                 {
                     this.props.is_visible_flatlist ?
-                        <View style={{ height: 152, width:"101%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
+                        <View style={{ height: 140, width:"100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
                             <ScrollView>
                                 <FlatList
                                     extraData={this.props.selected_index}
@@ -137,7 +137,7 @@ class MoneyTransferScreen extends Component {
             <View>
                 {
                     this.props.is_visible_flatlist2 ?
-                        <View style={{ height: 152, width:"101%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
+                        <View style={{ height: 140, width:"100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
                             <ScrollView>
                                 <FlatList
                                     extraData={this.props.selected_index2}
@@ -155,10 +155,12 @@ class MoneyTransferScreen extends Component {
         )
     }
     onDropDownPress = () => {
+        Keyboard.dismiss()
         this.props.transferVisibilityList(true)
         this.props.transferVisibilityList2(false)
     }
     onDropDownPress2 = () => {
+        Keyboard.dismiss()
         this.props.transferVisibilityList(false)
         this.props.transferVisibilityList2(true)
     }
@@ -199,7 +201,9 @@ class MoneyTransferScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }} >
-            <View  style={{ flex: 1  }} onStartShouldSetResponder={(evt) => this.handleEventsClose()}>
+            <View  style={{ flex: 1  }} onStartShouldSetResponder={(evt) => {
+                Keyboard.dismiss()
+                this.handleEventsClose()}}>
                 <View style={{ margin: 10, borderWidth: Platform.OS === "ios" ? 0.4 : 0.4,backgroundColor: this.props.is_selected1 ? this.props.selected_icon_color : Color.WHITE_COLOR,borderRadius:6,flexDirection:"column" }} onStartShouldSetResponder={(evt) => this.props.transferVisibilityList(false)}>
                     <View style={{ margin:10}}>
                         <TouchableOpacity onPress={() => this.onDropDownPress()}>

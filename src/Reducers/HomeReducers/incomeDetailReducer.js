@@ -64,7 +64,6 @@ export default (state = INITIAL_STATE, action) => {
 		case FLATLIST_VISIBILITY:
 			return { ...state, is_visible_flatlist: action.payload }
 		case INCOME_DETAIL_SELECTED_ACCOUNT_ITEMS:
-			console.log("props==> fetch : ",action.payload)
 			return {
 				...state,
 				selected_name:action.payload.item_account_name,
@@ -75,7 +74,6 @@ export default (state = INITIAL_STATE, action) => {
 				
 			}
 		case INCOME_DETAIL_SELECTED_CATEGORY_ITEMS:
-		console.log("props==> fetch : ",action.payload)
 			return {
 				...state,
 				selected_cat_name:action.payload.item_cat_name,

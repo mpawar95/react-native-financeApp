@@ -20,7 +20,6 @@ import { MainHeader } from '../../Components';
 import {
   getFavIncome,
   getFavouriteDate,
-  visibilityFavList,
   deleteFavouriteItem,
   FavouriteScreenLoad,
   favouriteDateRangePicker,
@@ -70,65 +69,9 @@ class FavouriteScreen extends Component {
     this.props.getFavouriteDate({ prop: "today" })
     this.props.getFavIncome(convertMyDate(today), convertMyDate(today))
   }
-  handleList = (selected_name) => {
-    if (selected_name == "Week") {
-      this.props.getFavIncome(convertMyDate(from_week), convertMyDate(to_week))
-    }
-    else if (selected_name == "Month") {
-      this.props.getFavIncome(convertMyDate(from_month), convertMyDate(to_month))
-    }
-    else if (selected_name == "Year") {
-      this.props.getFavIncome(convertMyDate(from_year), convertMyDate(to_year))
-    }
-  }
-  onPressSelectedItem = (item) => {
-    this.props.visibilityFavList(false)
-    this.props.selectedFavouriteRange("")
-    this.props.onPressFavouriteFlatListItem(true)
-    this.props.onPressFavouriteSeletedItem(item.item.select,item.item.key)
-    this.setState({
-    },
-      () => {
-        this.handleList(this.props.selectedFlatListName)
-      })
-  }
-  _render_Item = (item) => {
-    return (
-      <View key={item.item.key}>
-        <TouchableOpacity onPress={() => this.onPressSelectedItem(item)}>
-          <View style={{ padding: 14, backgroundColor: this.props.is_selected ? item.item.key == this.props.selectedFlatListIndex ? Color.PRIMARY : Color.WHITE_COLOR : "", flexDirection: 'row' }}>
-            <Text style={{ marginLeft: 5, color: this.props.is_selected ? item.item.key == this.props.selectedFlatListIndex ? Color.WHITE_COLOR : "black" : "black" }}>{item.item.select}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-  _renderDisplayList = () => {
-    return (
-      <View>
-        {
-          this.props.is_displaylist ?
-            <View style={{ width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "relative", backgroundColor: 'white' }}>
-              <ScrollView>
-                <FlatList
-                  extraData={this.props.selectedFlatListIndex}
-                  data={this.props.data}
-                  renderItem={this._render_Item}
-                  keyExtractor={item => item.key.toString()}
-                  ItemSeparatorComponent={this.renderSeparator}
-                /></ScrollView>
-            </View>
-            :
-            <View></View>
-        }
-      </View>
-    )
-  }
-  onPressListDisplay = () => {
-    this.props.visibilityFavList(true)
-  }
+  
   onPressItem = (prop) => {
-    this.props.visibilityFavList(false)
+    
     this.props.getFavouriteDate(prop)
     if (prop.prop == "today") {
       this.refs.dropdown_2.select(-1);
@@ -206,13 +149,6 @@ class FavouriteScreen extends Component {
     return (
       <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 }}>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          {/* <TouchableOpacity onPress={() => this.onPressListDisplay()}>
-            <View style={[styles.dropDownlist1, { borderColor: this.props.is_selected ? Color.PRIMARY : Color.LIGHT_FONT_COLOR }]}>
-              <Text style={{ color: this.props.is_selected ? "black" : Color.LIGHT_FONT_COLOR, marginLeft: 10 }}>{this.props.is_selected ? this.props.selectedFlatListName : "Select"}</Text>
-              <Icon name="chevron-right" color={Color.LIGHT_FONT_COLOR} />
-            </View>
-          </TouchableOpacity>
-          {this._renderDisplayList()} */}
             <ModalDropdown
             ref="dropdown_2"
             defaultValue="Select"
@@ -284,7 +220,7 @@ class FavouriteScreen extends Component {
               </View>
             }
             body={
-              <View style={{ width: "100%", flexDirection: 'row', justifyContent: "space-between" }} onStartShouldSetResponder={(evt) => this.props.visibilityFavList(false)} >
+              <View style={{ width: "100%", flexDirection: 'row', justifyContent: "space-between" }}  >
                 <View style={{ flexDirection: "row" ,marginTop:-5,marginBottom:-5}}>
                   <View style={{ margin: 10,  height: 35, width: 35, borderRadius: 35 / 2, backgroundColor: item.item.icon_color }}></View>
                   <View style={{ flexDirection: "column" }}>
@@ -378,9 +314,9 @@ class FavouriteScreen extends Component {
           onRightPress={() => alert('Statistics')}
           right_icon_name={"list"} />
 
-        <View style={{ backgroundColor: 'white', }} onStartShouldSetResponder={(evt) => this.props.visibilityFavList(false)} >
+        <View style={{ backgroundColor: 'white', }} >
           {this.selectionList()}
-          <View style={{ zIndex: -1, flexDirection: 'row', justifyContent: "space-between", marginTop: 20, marginLeft: 10, marginRight: 10, bottom: 10 }} onStartShouldSetResponder={(evt) => this.props.visibilityFavList(false)}>
+          <View style={{ zIndex: -1, flexDirection: 'row', justifyContent: "space-between", marginTop: 20, marginLeft: 10, marginRight: 10, bottom: 10 }} >
             <View>
               <Text>Favourites</Text>
             </View>
@@ -453,7 +389,6 @@ const mapStateToProps = ({ favorite }) => {
 }
 export default connect(mapStateToProps, {
   getFavIncome,
-  visibilityFavList,
   getFavouriteDate,
   deleteFavouriteItem,
   FavouriteScreenLoad,

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
     View,
     TouchableOpacity,
-    Platform
+    Keyboard
 } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import { Icon } from "react-native-elements";
@@ -39,10 +39,6 @@ class AddNewAccountScreen extends Component {
             headerTitleStyle: styles.navigationHeaderTitleStyle
         }
     }
-    
-    componentWillReceiveProps(newProps){
-        
-    }
     componentDidMount() {
         const { navigation } = this.props;
         this.props.navigation.setParams({ navigator: navigation ,onHandleBack: this.onHandleBack})
@@ -58,6 +54,8 @@ class AddNewAccountScreen extends Component {
         this.props.onBalanceInputChange(text)
     }
     _onColorPress = () => {
+        
+        Keyboard.dismiss()
         this.props.onColorIconPress(true)
     }
     onItemPress = (item) => {
@@ -118,6 +116,7 @@ class AddNewAccountScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
+                <View style={{flex:1}} onStartShouldSetResponder={(evt) => Keyboard.dismiss()}>
                 <AddNewAccount
                     accountPlaceHolder="Account name"
                     BalancePlaceHolder="Initial Balance"
@@ -141,8 +140,7 @@ class AddNewAccountScreen extends Component {
                         :
                         <View></View>
                 }
-
-
+            </View>
             </SafeAreaView>
         )
     }

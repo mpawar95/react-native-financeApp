@@ -90,9 +90,6 @@ class AccountDetailScreen extends Component {
     this.props.accountDetailGetIncome(item.item.account_name, convertMyDate(today), convertMyDate(today))
     this.props.accountDetailGetDate({ prop: "today" })
   }
-  onPressListDisplay = () => {
-    this.props.accountDetailFlatListVisibility(true)
-  }
   renderSeparator = () => {
     return (
       <View
@@ -104,65 +101,7 @@ class AccountDetailScreen extends Component {
       />
     );
   };
-  handleList = (selected_name) => {
-    if (selected_name == "Week") {
-      this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(from_week), convertMyDate(to_week))
-    }
-    else if (selected_name == "Month") {
-      this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(from_month), convertMyDate(to_month))
-    }
-    else if (selected_name == "Year") {
-      this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(from_year), convertMyDate(to_year))
-    }
-  }
-  onPressSelectedItem = (item) => {
-    this.props.accountDetailFlatListVisibility(false)
-    this.props.onPressSelectedItem(true)
-    this.props.onPressSelectedName(item.item.select, item.item.key)
-    this.props.selectAccountDetailDateRange("")
-    this.setState({
-      selectedStartDate: null,
-      selectedEndDate: null,
-    }, () => {
-      this.handleList(this.props.selectedFlatListName)
-    })
-  }
-  _render_Item = (item) => {
-    return (
-      <View key={item.item.key}>
-        <TouchableOpacity onPress={() => this.onPressSelectedItem(item)}>
-          <View style={{ padding: 14, backgroundColor: this.props.is_selected ? item.item.key == this.props.selectedFlatListIndex ? Color.PRIMARY : Color.WHITE_COLOR : Color.WHITE_COLOR }}>
-            <Text style={{ marginLeft: 5, color: this.props.is_selected ? item.item.key == this.props.selectedFlatListIndex ? Color.WHITE_COLOR : "black" : "black" }}>{item.item.select}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-  _renderDisplayList = () => {
-
-    return (
-      <View>
-        {
-          this.props.is_displaylist ?
-            <View style={{ width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "relative", backgroundColor: 'white' }}>
-              <ScrollView>
-                <FlatList
-                  extraData={this.props.selectedFlatListIndex}
-                  data={this.props.data}
-                  renderItem={this._render_Item}
-                  keyExtractor={item => item.key.toString()}
-                  ItemSeparatorComponent={this.renderSeparator}
-                /></ScrollView>
-            </View>
-            :
-            <View></View>
-        }
-      </View>
-    )
-  }
-
   onPressItem = (prop) => {
-    this.props.accountDetailFlatListVisibility(false)
     this.props.accountDetailGetDate(prop)
     if (prop.prop == "today") {
       this.refs.dropdown_2.select(-1);
@@ -190,7 +129,6 @@ class AccountDetailScreen extends Component {
   }
   datePickerDialog = () => {
     this.props.accountScreenDatePickerDialogVisible(true)
-    this.props.accountDetailFlatListVisibility(false)
   }
 
   onSelect = (index, value) => {
@@ -211,13 +149,6 @@ class AccountDetailScreen extends Component {
     return (
       <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 }}>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          {/* <TouchableOpacity onPress={() => this.onPressListDisplay()}>
-            <View style={[styles.dropDownlist1, { borderColor: this.props.is_selected ? Color.PRIMARY : Color.LIGHT_FONT_COLOR }]}>
-              <Text style={{ color: this.props.is_selected ? "black" : Color.LIGHT_FONT_COLOR, marginLeft: 10 }}>{this.props.is_selected ? this.props.selectedFlatListName : "Select"}</Text>
-              <Icon name="chevron-right" color={Color.LIGHT_FONT_COLOR} />
-            </View>
-          </TouchableOpacity>
-          {this._renderDisplayList()} */}
           <ModalDropdown
             ref="dropdown_2"
             defaultValue="Select"
@@ -439,7 +370,7 @@ class AccountDetailScreen extends Component {
           </IndicatorViewPager>
         </View>
         {this.renderSeparator()}
-        <View style={{ zIndex: -1 }} onStartShouldSetResponder={(evt) => this.props.accountDetailFlatListVisibility(false)}>
+        <View style={{ zIndex: -1 }} >
           {this.selectionList()}
           <View style={styles.thirdHeaderTransaction}>
             <Text>Transaction</Text>
@@ -456,7 +387,7 @@ class AccountDetailScreen extends Component {
           {this.renderSeparator()}
         </View>
         {this.renderDatePickerDialog()}
-        <View style={{ flex: 1 }} onStartShouldSetResponder={(evt) => this.props.accountDetailFlatListVisibility(false)}>
+        <View style={{ flex: 1 }} >
 
           <FlatList
             data={this.props.income_list}

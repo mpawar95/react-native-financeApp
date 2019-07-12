@@ -8,6 +8,7 @@ import {
     TouchableOpacity, Platform,
     FlatList,
     KeyboardAvoidingView,
+    Keyboard
 } from 'react-native';
 import { DatePicker, Input, BottomButton } from '../../Components';
 import { Icon } from 'react-native-elements'
@@ -38,7 +39,7 @@ class IncomeDetailScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => params.onHandleBack()}>
-                    <View style={{ flexDirection: 'row', marginLeft: 5 }}>
+                    <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center'}}>
                         <Icon name="arrow-back" size={22} />
                     </View>
                 </Ripple>
@@ -50,6 +51,7 @@ class IncomeDetailScreen extends Component {
         }
     }
     onHandleBack=()=>{
+        Keyboard.dismiss()
         this.props.incomeDetailScreenLoad()
         this.props.navigation.pop()
     }
@@ -118,6 +120,7 @@ class IncomeDetailScreen extends Component {
         )
     }
     onDropDownPress = () => {
+        Keyboard.dismiss()
         this.props.flatList_visibility(true)
     }
     noteChange = (text) => {
@@ -128,7 +131,6 @@ class IncomeDetailScreen extends Component {
 
         const income = navigation.getParam('income');
         const item = this.props.navigation.getParam('item')
-        console.log("updated",item)
         item === undefined ?
             this.props.addIncomeDetail(
                 income,
@@ -158,7 +160,9 @@ class IncomeDetailScreen extends Component {
         this.props.onPressCatItem(true)
         this.props.onPressIncomeCatSelected(item.item.cat_name,item.item.icon,item.item.key)
     }
-    onCategoryPress = () => {
+    onCategoryPress = () => 
+    {
+        Keyboard.dismiss()
         this.props.categoryModalVisible(true)
     }
     cat_render_Item = (item) => {
@@ -200,9 +204,10 @@ class IncomeDetailScreen extends Component {
         const { navigation } = this.props;
         const income = navigation.getParam('income');
         return (
-            <KeyboardAvoidingView  style={{flex:1}}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
                 <View style={styles.subHeader}
-                    onStartShouldSetResponder={(evt) => this.props.flatList_visibility(false)}>
+                    onStartShouldSetResponder={(evt) => {this.props.flatList_visibility(false)
+                    Keyboard.dismiss()}}>
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                         <Text style={styles.plusIcon}>+</Text>
                         <Text style={styles.viewMoney}>{this.props.selected_money_icon ? this.props.selected_money_icon : "$"}</Text>

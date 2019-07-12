@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
-    FlatList
+    FlatList,
+    Keyboard
 } from 'react-native';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
 import { DatePicker, Input, BottomButton } from '../../Components';
@@ -39,7 +40,7 @@ class ExpenceDetailScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => params.onHandleBack()}>
-                    <View style={{ flexDirection: 'row', marginLeft: 5 }}>
+                    <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
                         <Icon name="arrow-back" size={22} />
                     </View>
                 </Ripple>
@@ -51,6 +52,7 @@ class ExpenceDetailScreen extends Component {
         }
     }
     onHandleBack = () => {
+        Keyboard.dismiss()
         this.props.expenceDetailScreenLoad()
         this.props.navigation.pop()
     }
@@ -65,6 +67,7 @@ class ExpenceDetailScreen extends Component {
             this.props.expenceSetItem(item.accountName, "home", item.icon_color, item.categoryName)
     }
     onDropDownPress = () => {
+        Keyboard.dismiss()
         this.props.expence_FlatList_visibility(true)
     }
     onPressSelectedItem = (item) => {
@@ -108,6 +111,7 @@ class ExpenceDetailScreen extends Component {
         )
     }
     onCategoryPress = () => {
+        Keyboard.dismiss()
         this.props.expenceCategoryModalVisible(true)
     }
     onPressCatSelectedItem = (item) => {
@@ -197,7 +201,10 @@ class ExpenceDetailScreen extends Component {
         return (
 
             <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-                <View style={styles.subHeader} onStartShouldSetResponder={(evt) => this.props.expence_FlatList_visibility(false)}>
+                <View style={styles.subHeader} onStartShouldSetResponder={(evt) => {
+                    this.props.expence_FlatList_visibility(false)
+                    Keyboard.dismiss()
+                }}>
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                         <Text style={{ fontWeight: "700", fontSize: 24, color: Color.RED_COLOR }}>-</Text>
                         <Text style={{ fontWeight: "700", fontSize: 20, color: Color.RED_COLOR, marginLeft: 5 }}>{this.props.selected_money_icon ? this.props.selected_money_icon : "$"}</Text>

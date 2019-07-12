@@ -10,7 +10,7 @@ import {
   FlatList,
   Platform,
   TouchableWithoutFeedback,
-  BackHandler
+  BackHandler,
 } from 'react-native';
 import moment from "moment";
 import { SwipeRow } from 'native-base';
@@ -26,7 +26,6 @@ import { Dialog } from 'react-native-simple-dialogs';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {
   homeAccountListFetch,
-  visibilityList,
   getDate,
   getIncome,
   setOnFavorite,
@@ -133,42 +132,6 @@ class HomeScreen extends React.Component {
         : <View></View>
     )
   }
-  handleList = (selected_name) => {
-    if (selected_name == "Week") {
-      this.props.getIncome(convertMyDate(from_week), convertMyDate(to_week))
-    }
-    else if (selected_name == "Month") {
-      this.props.getIncome(convertMyDate(from_month), convertMyDate(to_month))
-    }
-    else if (selected_name == "Year") {
-      this.props.getIncome(convertMyDate(from_year), convertMyDate(to_year))
-    }
-  }
-  onPressSelectedItem = (item) => {
-    this.props.visibilityList(false)
-    this.props.onPressFlatListItem(true)
-    this.props.selectDateRange("")
-    this.props.onPressSelectedFlatListName(item.item.select,item.item.key)
-   
-    this.setState({
-      selectedStartDate: null,
-      selectedEndDate: null,
-    }, () => {
-      this.handleList(this.props.selectedFlatListName)
-    })
-  }
-  _render_Item = (item) => {
-
-    return (
-      <View key={item.item.id}>
-        <TouchableOpacity onPress={() => this.onPressSelectedItem(item)}>
-          <View style={{ padding: 14, backgroundColor: this.props.is_selected ? item.item.key == this.props.selectedFlatListIndex ? Color.PRIMARY : Color.WHITE_COLOR : "", flexDirection: 'row' }}>
-            <Text style={{ marginLeft: 5, color: this.props.is_selected ? item.item.key == this.props.selectedFlatListIndex ? Color.WHITE_COLOR : "black" : "black" }}>{item.item.select}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    )
-  }
   renderSeparator = () => {
     return (
       <View
@@ -181,33 +144,10 @@ class HomeScreen extends React.Component {
       />
     );
   };
-  _renderDisplayList = () => {
-    return (
-      <View>
-        {
-          this.props.is_displaylist ?
-            <View style={{ width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "relative", backgroundColor: 'white' }}>
-              <ScrollView>
-                <FlatList
-                  extraData={this.props.selectedFlatListIndex}
-                  data={this.props.data}
-                  renderItem={this._render_Item}
-                  keyExtractor={item => item.key.toString()}
-                  ItemSeparatorComponent={this.renderSeparator}
-                /></ScrollView>
-            </View>
-            :
-            <View></View>
-        }
-      </View>
-    )
-  }
-  onPressListDisplay = () => {
-    this.props.visibilityList(true)
-  }
+  
 
   onPressItem = (prop) => {
-    this.props.visibilityList(false)
+    
     this.props.getDate(prop)
     if (prop.prop == "today") {
       this.refs.dropdown_2.select(-1);
@@ -233,7 +173,6 @@ class HomeScreen extends React.Component {
   }
   datePickerDialog = () => {
     this.props.datePickerDialogVisible(true)
-    this.props.visibilityList(false)
   }
   onSelect=(index, value)=>{
     this.props.onPressFlatListItem(true)
@@ -253,14 +192,6 @@ class HomeScreen extends React.Component {
     return (
       <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 }}>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-          {/* <TouchableOpacity onPress={() => this.onPressListDisplay()}>
-            <View style={[styles.dropDownlist1, { borderColor: this.props.is_selected ? Color.PRIMARY : Color.LIGHT_FONT_COLOR }]}>
-              <Text style={{ color: this.props.is_selected ? "black" : Color.LIGHT_FONT_COLOR, marginLeft: 10 }}>{this.props.is_selected ? this.props.selectedFlatListName : "Select"}</Text>
-              <Icon name="chevron-right" color={Color.LIGHT_FONT_COLOR} />
-            </View>
-          </TouchableOpacity> */}
-          {/* {this._renderDisplayList()} */}
-          {/* <View style={[styles.dropDownlist, { borderColor: this.props.is_selected ? Color.PRIMARY : Color.LIGHT_FONT_COLOR }]}> */}
             <ModalDropdown
             ref="dropdown_2"
             defaultValue="Select"
@@ -275,9 +206,6 @@ class HomeScreen extends React.Component {
             dropdownTextHighlightStyle={{ backgroundColor: Color.PRIMARY, color: this.props.is_selected ? Color.WHITE_COLOR : Color.LIGHT_FONT_COLOR }}
             onSelect={(index, value) => this.onSelect(index, value)}
             />
-
-            {/* </ModalDropdown> */}
-          {/* </View> */}
         </View>
         <View style={{ flex: 1, backgroundColor: 'white', marginLeft: 20 }}>
           <Ripple onPress={() => this.onPressItem({ prop: "today" })}>
@@ -341,11 +269,11 @@ class HomeScreen extends React.Component {
         }
         body={
           <Ripple
-            style={{ flex: 1 }}
+            style={{ flex: 1,marginTop:-10,marginBottom:-10 }}
             onPress={() => this.props.navigation.navigate("EditIncomeDetail", { item: item.item })}
           >
-            <View style={{ flexDirection: 'row', justifyContent: "space-between",}} >
-              <View style={{ flexDirection: "row",marginTop:-5,marginBottom:-5 }}>
+            <View style={{ flexDirection: 'row', justifyContent: "space-between",marginTop:5,marginBottom:5}} >
+              <View style={{ flexDirection: "row" }}>
                 <View style={{ margin: 10, height: 35, width: 35, borderRadius: 35 / 2, backgroundColor: item.item.icon_color }}></View>
                 <View style={{ flexDirection: "column" }}>
                   <Text style={{ color: "black",fontWeight:"500" }}>{item.item.categoryName}</Text>
@@ -462,17 +390,17 @@ class HomeScreen extends React.Component {
           is_right_icon_visible={true}
           right_icon_name={"pie-chart"}
         />
-        <View style={[styles.secondHeader]} onStartShouldSetResponder={(evt) => this.props.visibilityList(false)}>
+        <View style={[styles.secondHeader]}>
           <Text style={{ justifyContent: 'flex-start' }}>Accounts</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ justifyContent: 'flex-end' }}>Total:</Text>
             <Text style={{ color: Color.PRIMARY, fontWeight: "500" }}>{" "}+ {"  "}{this.props.selected_money_icon ? this.props.selected_money_icon : "$"}{this.props.totalAmount}</Text>
           </View>
         </View>
-        <View style={styles.renderFlatList} onStartShouldSetResponder={(evt) => this.props.visibilityList(false)}>
+        <View style={styles.renderFlatList}>
           {this.renderFlatList()}
         </View>
-        <View style={{ zIndex: -1 }} onStartShouldSetResponder={(evt) => this.props.visibilityList(false)}>
+        <View style={{ zIndex: -1 }} >
           {this.selectionList()}
           <View style={styles.thirdHeaderTransaction}>
             <Text>Transaction</Text>
@@ -487,7 +415,7 @@ class HomeScreen extends React.Component {
           {this.renderSeparator()}
         </View>
         {this.renderDatePickerDialog()}
-        <View style={{ flex: 1, }} onStartShouldSetResponder={(evt) => this.props.visibilityList(false)}>
+        <View style={{ flex: 1, }}>
           
             <FlatList
               data={this.props.income_list}
@@ -569,7 +497,6 @@ const mapStateToProps = ({ home }) => {
 }
 export default connect(mapStateToProps, {
   homeAccountListFetch,
-  visibilityList,
   getDate,
   getIncome,
   setOnFavorite,

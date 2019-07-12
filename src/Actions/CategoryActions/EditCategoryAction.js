@@ -5,9 +5,18 @@ import {
     GET_CATEGORY_SUCCESS,
     GET_CATEGORY_FAIL,
     UPDATE_ITEM_FAIL,
-    UPDATE_ITEM_SUCCESS
+    UPDATE_ITEM_SUCCESS,
+    EDIT_CATEGORY_SELECTED_ITEMS,
+    EDIT_CATEGORY_SET_ITEM,
+    EDIT_CATEGORY_HANDLE_BACK_PRESS
 } from '../CategoryActions/types';
 import { db } from '../../utils/firebaseConfig';
+
+
+export const handleBackPress=()=>{
+    return {type:EDIT_CATEGORY_HANDLE_BACK_PRESS}
+}
+
 export const editCategoryNameChanged = (text) => {
     return { type: EDIT_CATEGORY_NAME_CHANGED, payload: text }
 }
@@ -19,8 +28,11 @@ export const onPressEditCategoryItems=(item_icon,item_key)=>{
         item_icon:item_icon,
         item_key:item_key
     }
+    return { type : EDIT_CATEGORY_SELECTED_ITEMS, payload:payload}
 }
-
+export const setItemEditCategory=(item_selected_Icon)=>{
+    return {type : EDIT_CATEGORY_SET_ITEM , payload:item_selected_Icon}
+}
 
 
 export const editCategoryLoad=(id)=>{

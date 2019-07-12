@@ -8,7 +8,8 @@ import {
     Platform,
     TextInput,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    Keyboard
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from "react-native-elements";
@@ -48,6 +49,7 @@ class NewCategoryScreen extends Component {
         }
     }
     onHandleBack=()=>{
+        Keyboard.dismiss()
         this.props.newCategoryScreenLoad()
         this.props.navigation.pop()
     }
@@ -71,6 +73,7 @@ class NewCategoryScreen extends Component {
         );
     };
     onPressSelectedItem = (item) => {
+        Keyboard.dismiss()
         this.props.newCategoryFlatListVisibility(false)
         this.props.onPressCategorySelectedItem(true)
         this.props.onPressCategorySelectedItemName(item.item.select,item.item.key)
@@ -91,7 +94,7 @@ class NewCategoryScreen extends Component {
             <View>
                 {
                     this.props.is_displaylist ?
-                        <View style={{ width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "relative", backgroundColor: 'white' }}>
+                        <View style={{ width: "100%",height: 90, borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "relative", backgroundColor: 'white' }}>
                             <ScrollView>
                                 <FlatList
                                     extraData={this.props.selected_index}
@@ -108,10 +111,12 @@ class NewCategoryScreen extends Component {
         )
     }
     onPressListDisplay = () => {
+        Keyboard.dismiss()
         this.props.newCategoryModalVisible(false)
         this.props.newCategoryFlatListVisibility(true)
     }
     onPressCatSelectedItem = (item) => {
+        Keyboard.dismiss()
         this.props.newCategoryModalVisible(false)
         this.props.newCategoryFlatListVisibility(false)
         this.props.onPressCatSelectedItemName(item.item.icon, item.item.key)
@@ -144,6 +149,7 @@ class NewCategoryScreen extends Component {
         )
     }
     onCategoryPress = () => {
+        Keyboard.dismiss()
         this.props.newCategoryFlatListVisibility(false)
         this.props.newCategoryModalVisible(true)
     }
@@ -171,7 +177,10 @@ class NewCategoryScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-            <View style={{ flex: 1 }} onStartShouldSetResponder={(evt) => this.props.newCategoryFlatListVisibility(false)}>
+            <View style={{ flex: 1 }} onStartShouldSetResponder={(evt) => {
+                this.props.newCategoryFlatListVisibility(false)
+                Keyboard.dismiss()
+             }}>
                     <View style={{ flexDirection: "row", alignItems: 'center', marginTop: 20 }} onStartShouldSetResponder={(evt) => this.props.newCategoryFlatListVisibility(false)}>
                         <View style={{ flexDirection: 'column', marginLeft: 10 }}>
                             <Icon name={this.props.selected_cat_icon_name ? this.props.selected_cat_icon_name : "airplay"} size={40} onPress={() => this.onCategoryPress()} />
