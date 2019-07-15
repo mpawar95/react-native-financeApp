@@ -56,8 +56,8 @@ class AccountDetailScreen extends Component {
       selectedStartDate: null,
       selectedEndDate: null,
     }
-    this.selectedRow = undefined;
-    this.component = {};
+    this.component = [];
+    this.selectedRow;
     this.onDateChange = this.onDateChange.bind(this);
   }
   static navigationOptions = ({ navigation }) => {
@@ -98,8 +98,11 @@ class AccountDetailScreen extends Component {
     );
   };
   onPressItem = (prop) => {
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.accountDetailGetDate(prop)
     if (prop.prop == "today") {
+      
       this.refs.dropdown_2.select(-1);
       this.props.onPressSelectedItem(false)
       this.props.onPressSelectedName("", "")
@@ -128,6 +131,8 @@ class AccountDetailScreen extends Component {
   }
 
   onSelect = (index, value) => {
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.onPressSelectedItem(true)
     this.props.onPressSelectedName(value, index)
     this.props.selectAccountDetailDateRange("")
@@ -186,19 +191,36 @@ class AccountDetailScreen extends Component {
     )
   }
   onUnFavoritePress = (item) => {
+    this.selectedRow._root.closeRow()
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.setOnAccountDetailUnFavorite(item)
   }
   onFavoritePress = (item) => {
+    this.selectedRow._root.closeRow()
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.setOnAccountDetailFavorite(item)
   }
   onDeleteItem = (item) => {
+    this.selectedRow._root.closeRow()
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.deleteAccountDetial(item.item.id)
   }
   _renderDataList = (item) => {
     return (
       <SwipeRow
+        ref={(c) => { this.component[item.item.id] = c }}
         leftOpenValue={75}
         rightOpenValue={-75}
+        onRowOpen={() => {
+          if ( this.selectedRow && this.selectedRow !== this.component[item.item.id]) 
+          { 
+            this.selectedRow._root.closeRow(); 
+          }
+          this.selectedRow = this.component[item.item.id]
+        }}
         left={
           item.item.is_favourite ?
             <View style={{ backgroundColor: "#c6a51d", height: "100%", justifyContent: 'center', alignContent: 'center' }}>
@@ -253,8 +275,8 @@ class AccountDetailScreen extends Component {
     console.log("page chagned", index)
   }
   previousPage = (index, item) => {
-    // console.log("Previous", index)
-    // console.log("Previous", item.account_name)
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.setPreviousAccountName(item.account_name)
     this.setState({
     }, () => {
@@ -264,8 +286,8 @@ class AccountDetailScreen extends Component {
 
   }
   nextPage = (index, item) => {
-    // console.log("next", index)
-    // console.log("next", item.account_name)
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.setNextAccountName(item.account_name)
     this.setState({
     }, () => {
@@ -275,6 +297,8 @@ class AccountDetailScreen extends Component {
 
   }
   onDateChange(date, type) {
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.onPressSelectedName("", "")
     if (type === 'END_DATE') {
       this.setState({
@@ -288,6 +312,8 @@ class AccountDetailScreen extends Component {
     }
   }
   selectRange = (startDate, endDate) => {
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.accountScreenDatePickerDialogVisible(false)
     this.props.onPressSelectedItem(false)
     this.props.onPressSelectedName("", "")

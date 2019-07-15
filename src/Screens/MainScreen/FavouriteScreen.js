@@ -52,6 +52,8 @@ class FavouriteScreen extends Component {
       selectedStartDate: null,
       selectedEndDate: null,
     }
+    this.component = [];
+    this.selectedRow;
     this.onDateChange = this.onDateChange.bind(this);
   }
   componentWillReceiveProps(newProps){
@@ -74,6 +76,8 @@ class FavouriteScreen extends Component {
     
     this.props.getFavouriteDate(prop)
     if (prop.prop == "today") {
+      this.component = {};
+      this.selectedRow = undefined;
       this.refs.dropdown_2.select(-1);
       this.props.getFavIncome(convertMyDate(today), convertMyDate(today))
       this.props.onPressFavouriteFlatListItem(false)
@@ -84,6 +88,8 @@ class FavouriteScreen extends Component {
         selectedEndDate: null,
       })
     } else {
+      this.component = {};
+      this.selectedRow = undefined;
       this.refs.dropdown_2.select(-1);
       this.props.getFavIncome(convertMyDate(yesterday), convertMyDate(yesterday))
       this.props.onPressFavouriteFlatListItem(false)
@@ -131,6 +137,8 @@ class FavouriteScreen extends Component {
     this.props.favouriteDateRangePicker(true)
   }
   onSelect=(index, value)=>{
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.selectedFavouriteRange("")
     this.props.onPressFavouriteFlatListItem(true)
     this.props.onPressFavouriteSeletedItem(value,index)
@@ -202,15 +210,26 @@ class FavouriteScreen extends Component {
     );
   };
   onFavoriteDelete = (item) => {
+    this.selectedRow._root.closeRow()
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.deleteFavouriteItem(item.item.id)
   }
   _renderDataList = (item) => {
       return (
         <View>
           <SwipeRow
+            ref={(c) => { this.component[item.item.id] = c }}
             leftOpenValue={75}
             rightOpenValue={-75}
             stopLeftSwipe
+            onRowOpen={() => {
+              if ( this.selectedRow && this.selectedRow !== this.component[item.item.id]) 
+              { 
+                this.selectedRow._root.closeRow(); 
+              }
+              this.selectedRow = this.component[item.item.id]
+            }}
             right={
               <View style={{ backgroundColor: Color.RED_COLOR, height: "100%", justifyContent: 'center', alignContent: 'center' }}>
                 <TouchableWithoutFeedback onPress={() => this.onFavoriteDelete(item)}>
@@ -253,6 +272,8 @@ class FavouriteScreen extends Component {
     })
   }
   onDateChange(date, type) {
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.onPressFavouriteSeletedItem("","")
     if (type === 'END_DATE') {
       this.setState({

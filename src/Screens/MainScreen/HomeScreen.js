@@ -57,6 +57,8 @@ class HomeScreen extends React.Component {
       selectedStartDate: null,
       selectedEndDate: null,
     },
+    this.component = [];
+    this.selectedRow;
     this.onDateChange = this.onDateChange.bind(this);
   }
   componentWillReceiveProps(newProps){
@@ -150,6 +152,8 @@ class HomeScreen extends React.Component {
     
     this.props.getDate(prop)
     if (prop.prop == "today") {
+      this.component = {};
+      this.selectedRow = undefined;
       this.refs.dropdown_2.select(-1);
       this.props.getIncome(convertMyDate(today), convertMyDate(today))
       this.props.onPressFlatListItem(false)
@@ -160,6 +164,8 @@ class HomeScreen extends React.Component {
         selectedEndDate: null,
       })
     } else {
+      this.component = {};
+      this.selectedRow = undefined;
       this.refs.dropdown_2.select(-1);
       this.props.getIncome(convertMyDate(yesterday), convertMyDate(yesterday))
       this.props.onPressFlatListItem(false)
@@ -175,6 +181,8 @@ class HomeScreen extends React.Component {
     this.props.datePickerDialogVisible(true)
   }
   onSelect=(index, value)=>{
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.onPressFlatListItem(true)
     this.props.onPressSelectedFlatListName(value, index)
     this.props.selectDateRange("")
@@ -233,19 +241,37 @@ class HomeScreen extends React.Component {
     )
   }
   onUnFavoritePress = (item) => {
+    this.selectedRow._root.closeRow()
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.setOnUnFavorite(item)
   }
   onFavoritePress = (item) => {
+    this.selectedRow._root.closeRow()
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.setOnFavorite(item)
   }
   onDeleteItem = (item) => {
+    this.selectedRow._root.closeRow()
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.deleteIncomeDetial(item)
+    
   }
   _renderDataList = (item) => {
     return (
       <SwipeRow
+        ref={(c) => { this.component[item.item.id] = c }}
         leftOpenValue={75}
         rightOpenValue={-75}
+        onRowOpen={() => {
+          if ( this.selectedRow && this.selectedRow !== this.component[item.item.id]) 
+          { 
+            this.selectedRow._root.closeRow(); 
+          }
+          this.selectedRow = this.component[item.item.id]
+        }}
         left={
           item.item.is_favourite ?
             <View style={{ backgroundColor: "#c6a51d", height: "100%", justifyContent: 'center', alignContent: 'center' }}>
@@ -325,6 +351,8 @@ class HomeScreen extends React.Component {
     this.props.onPressFlatListItem(false)
   }
   onDateChange(date, type) {
+    this.component = {};
+    this.selectedRow = undefined;
     this.props.onPressSelectedFlatListName("","")
     if (type === 'END_DATE') {
       this.setState({
