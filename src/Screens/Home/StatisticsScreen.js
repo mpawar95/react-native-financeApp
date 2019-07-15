@@ -61,15 +61,13 @@ class StatisticsScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => navigator.pop()}>
-                    <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+                    <View style={styles.backIcon}>
                         <Icon name="arrow-back" size={22} />
                     </View>
                 </Ripple>
             ),
             title: "Statistics",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTitleStyle
         }
     }
     componentDidMount() {
@@ -82,62 +80,6 @@ class StatisticsScreen extends Component {
         this.props.statisticsScreenLoad()
         this.props.statisticsGetAccountData()
     }
-    handleList = (selected_name) => {
-        if (selected_name == "Week") {
-            this.props.getInformation(this.props.selectedIndex, convertMyDate(from_week), convertMyDate(to_week))
-        }
-        else if (selected_name == "Month") {
-            this.props.getInformation(this.props.selectedIndex, convertMyDate(from_month), convertMyDate(to_month))
-        }
-        else if (selected_name == "Year") {
-            this.props.getInformation(this.props.selectedIndex, convertMyDate(from_year), convertMyDate(to_year))
-        }
-    }
-    onPressSelectedItem = (item) => {
-        this.props.visibilityStatList(false)
-        this.props.onPressStatisticsItem(true)
-        this.props.onPressStatisticsSelectedName(item.item.select, item.item.key)
-        this.setState({
-            selectedStartDate: null,
-            selectedEndDate: null,
-        }, () => {
-            this.handleList(this.props.selectedFlatListName)
-        })
-    }
-    _render_Item = (item) => {
-        return (
-            <View key={item.item.key}>
-                <TouchableOpacity onPress={() => this.onPressSelectedItem(item)}>
-                    <View style={{ padding: 14, backgroundColor: this.props.is_selected ? item.item.key == this.props.selected_index ? Color.PRIMARY : Color.WHITE_COLOR : "", flexDirection: 'row' }}>
-                        <Text style={{ marginLeft: 5, color: this.props.is_selected ? item.item.key == this.props.selected_index ? Color.WHITE_COLOR : "black" : "black" }}>{item.item.select}</Text>
-                    </View>
-                </TouchableOpacity> 
-            </View>
-            
-        )
-    }
-    _renderDisplayList = () => {
-        return (
-            <View>
-                {
-                    this.props.is_flatList_visible ?
-                        <View style={{ width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "relative", backgroundColor: 'white' }}>
-                            <ScrollView>
-                                <FlatList
-                                    extraData={this.props.selected_index}
-                                    data={this.props.data}
-                                    renderItem={this._render_Item}
-                                    keyExtractor={item => item.key.toString()}
-                                    ItemSeparatorComponent={this.renderSeparator}
-                                /></ScrollView>
-                        </View>
-                        :
-                        <View></View>
-                }
-            </View>
-        )
-    }
-
     onPressListDisplay = () => {
         this.props.visibilityStatList(true)
     }
@@ -187,15 +129,8 @@ class StatisticsScreen extends Component {
       }
     selectionList = () => {
         return (
-            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 }}>
+            <View style={styles.selectionList}>
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
-                    {/* <TouchableOpacity onPress={() => this.onPressListDisplay()}>
-                        <View style={[styles.dropDownlist, { borderColor: this.props.is_selected ? Color.PRIMARY : Color.LIGHT_FONT_COLOR }]}>
-                            <Text style={{ color: this.props.is_selected ? "black" : Color.LIGHT_FONT_COLOR, marginLeft: 10 }}>{this.props.is_selected ? this.props.selectedFlatListName : "Select"}</Text>
-                            <Icon name="chevron-right" color={Color.LIGHT_FONT_COLOR} />
-                        </View>
-                    </TouchableOpacity>
-                    {this._renderDisplayList()} */}
                     <ModalDropdown
                         ref="dropdown_2"
                         defaultValue="Select"
@@ -410,7 +345,7 @@ class StatisticsScreen extends Component {
                     </ScrollView>
                 </View>
 
-                <ActionButton buttonColor={Color.PRIMARY}>
+                <ActionButton buttonColor={Color.PRIMARY} buttonText="+/-">
                     <ActionButton.Item buttonColor={Color.RED_COLOR} title="Add Expence" onPress={() => this.props.navigation.navigate("AddExpence")}>
                         <Text style={styles.Floatminus}>-</Text>
                     </ActionButton.Item>

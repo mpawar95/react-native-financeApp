@@ -41,5 +41,9 @@ export const styles = StyleSheet.create({
         { borderColor: Color.PRIMARY, zIndex: -1, },
     tabTextStyle:
         { color: Color.PRIMARY,fontSize:18, zIndex: -1, },
-
+    backIcon:{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' },
+    headerTitleStyle:{
+        fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
+    },
+    selectionList:{ flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 }
 })

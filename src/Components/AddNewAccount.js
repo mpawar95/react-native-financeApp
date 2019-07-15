@@ -8,10 +8,10 @@ import { Color } from "../utils/Colors";
 export class AddNewAccount extends Component {
     state = { isFocused: false }
     handleInputFocus = () => this.setState({ isFocused: true })
-    handleInputFocus1= () => this.setState({ isFocused: false})
+    handleInputFocus1 = () => this.setState({ isFocused: false })
     render() {
         const { isFocused } = this.state
-        const { accountPlaceHolder, BalancePlaceHolder, is_icon, accountInputChange,amountTextVisibility, balanceInputChange,  onImagePress, icon_name, balanceInputValue, accountInputValue,selected_color } = this.props;
+        const { accountPlaceHolder, BalancePlaceHolder, is_icon, accountInputChange, amountTextVisibility, balanceInputChange, onImagePress, icon_name, balanceInputValue, accountInputValue, selected_color } = this.props;
         return (
             <View style={{}}>
                 <View style={{ marginTop: 10, marginLeft: 20, marginRight: 20 }}>
@@ -19,12 +19,12 @@ export class AddNewAccount extends Component {
                         <View style={{ flexDirection: 'column' }}>
                             <TouchableOpacity onPress={onImagePress}>
                                 <View style={{
-                                    justifyContent:"center",
-                                    alignSelf:"center",
+                                    justifyContent: "center",
+                                    alignSelf: "center",
                                     width: 50,
                                     height: 50,
                                     borderRadius: 50 / 2,
-                                    backgroundColor:   selected_color? `${selected_color}` : "#a9a9a9"
+                                    backgroundColor: selected_color ? `${selected_color}` : "#a9a9a9"
                                 }}></View>
                             </TouchableOpacity>
                             <Text style={{ fontSize: 10, marginTop: 5 }}>Choose Color</Text>
@@ -41,7 +41,7 @@ export class AddNewAccount extends Component {
                             </View>
                         </View>
                     </View>
-                    <View>{ amountTextVisibility ?
+                    <View>{amountTextVisibility ?
                         <View style={[Platform.OS === "ios" ? styles.inputContainerNewIos : styles.inputContainerNewAndroid, { marginTop: 20 }]}>
                             <View style={{ width: "100%" }}>
                                 <TextInput
@@ -57,15 +57,15 @@ export class AddNewAccount extends Component {
                             </View>
                             {is_icon ?
                                 <View style={Platform.OS === "ios" ? "" : { marginTop: 8, marginRight: 10 }}>
-                                    <Icon name={icon_name} size={24} color={isFocused ? Color.PRIMARY: Color.LIGHT_FONT_COLOR }/>
+                                    <Icon name={icon_name} size={24} color={isFocused ? Color.PRIMARY : Color.LIGHT_FONT_COLOR} />
                                 </View>
                                 : <View >
 
                                 </View>
                             }
-                        </View> 
+                        </View>
                         : <View></View>
-                        }
+                    }
                     </View>
                 </View>
             </View>
@@ -89,8 +89,8 @@ AddNewAccount.propTypes = {
     ]),
     onImagePress: PropTypes.func,
     icon_name: PropTypes.string,
-    selected_color:PropTypes.string,
-    amountTextVisibility:PropTypes.bool
+    selected_color: PropTypes.string,
+    amountTextVisibility: PropTypes.bool
 }
 AddNewAccount.defaultProps = {
     is_icon: true,

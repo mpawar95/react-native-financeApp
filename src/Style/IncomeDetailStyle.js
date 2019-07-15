@@ -1,5 +1,5 @@
-import { StyleSheet,Platform } from "react-native";
-import {Color } from '../utils/Colors';
+import { StyleSheet, Platform } from "react-native";
+import { Color } from '../utils/Colors';
 
 export const styles = StyleSheet.create({
       subHeader: {
@@ -11,14 +11,23 @@ export const styles = StyleSheet.create({
       viewMoney: {
             fontWeight: "700", fontSize: 20, color: Color.PRIMARY
       },
-      plusIcon:{
+      plusIcon: {
             fontWeight: "700",
             fontSize: 24,
             color: Color.PRIMARY
       },
-      categoryItem:{ 
-            flexDirection: 'row', 
-            justifyContent: 'flex-start', 
-            flex: 1 
+      categoryItem: {
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            flex: 1
+      },
+      accountlist: {
+            height: 150, width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white'
+      },
+      headerTextStyle:{
+            fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
+      },
+      backIcon:{
+            height: 40, width: 40, alignContent: 'center', justifyContent: 'center'
       }
 })

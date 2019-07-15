@@ -65,17 +65,13 @@ class AccountDetailScreen extends Component {
     return {
       headerLeft: (
         <Ripple onPress={() => navigator.pop()}>
-          <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
-            <View style={{}}>
+          <View style={styles.backIcon}>
               <Icon name="arrow-back" size={22} />
-            </View>
           </View>
         </Ripple>
       ),
       title: "Account Detail",
-      headerTitleStyle: {
-        fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-      },
+      headerTitleStyle: styles.headerTitleStyle
     }
   }
   componentDidUpdate() {

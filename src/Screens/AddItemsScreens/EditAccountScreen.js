@@ -20,6 +20,7 @@ import {
     onPressColorPickerVisible,
     onPressEditAccountSelectedItem
 } from '../../Actions'
+import { styles} from '../../Style/editaccountStyle'
 import Ripple from 'react-native-material-ripple';
 import { Color } from '../../utils/Colors';
 class EditAccountScreen extends Component {
@@ -32,22 +33,20 @@ class EditAccountScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => navigator.pop()}>
-                        <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+                        <View style={styles.backIcon}>
                             <Icon name="arrow-back" size={22}/>
                         </View>
                 </Ripple>
             ),
             headerRight: (
                 <TouchableWithoutFeedback onPress={() => params.onDeletePress()}>
-                  <View style={{ flexDirection: 'row', marginRight: 5, }}>
+                  <View style={{ marginRight: 5, }}>
                     <Text style={{ color: Color.RED_COLOR }}>{"Delete"}</Text>
                   </View>
                 </TouchableWithoutFeedback>
             ),
             title: "Edit account",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTextStyle
         }
     }
     componentDidMount(){

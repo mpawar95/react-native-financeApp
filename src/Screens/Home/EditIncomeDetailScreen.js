@@ -16,6 +16,7 @@ import { Color } from '../../utils/Colors';
 import { convertDateForUI, convertTimeForUI } from '../../utils/DateFormate'
 import { EditIncomeScreenLoad } from '../../Actions'
 import Ripple from 'react-native-material-ripple';
+import {styles} from '../../Style/IncomeDetailStyle'
 class EditIncomeDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const navigator = navigation.getParam("navigator")
@@ -24,22 +25,20 @@ class EditIncomeDetailScreen extends Component {
     return {
       headerLeft: (
         <Ripple onPress={() => navigator.pop()}>
-          <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+          <View style={styles.backIcon}>
             <Icon name="arrow-back" size={22} />
           </View>
         </Ripple>
       ),
       headerRight: (
         <TouchableWithoutFeedback onPress={() => params.onEditPress()}>
-          <View style={{ flexDirection: 'row', marginRight: 5, }}>
+          <View style={{ marginRight: 5, }}>
             <Text style={{ color: Color.PRIMARY }}>{item.is_income ? "Edit" : item.is_expance ? "Edit" : null}</Text>
           </View>
         </TouchableWithoutFeedback>
       ),
       title: "Income Detail",
-      headerTitleStyle: {
-        fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-      }
+      headerTitleStyle: styles.headerTextStyle
     }
   }
   componentDidMount() {

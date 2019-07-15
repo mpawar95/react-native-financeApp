@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { Color } from '../utils/Colors';
 
 export const styles = StyleSheet.create({
@@ -23,5 +23,9 @@ export const styles = StyleSheet.create({
   },
   textView:{
     fontSize:20,fontWeight:"700",color:"white"
+  },
+  backIcon:{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' },
+  headerTitleStyle:{
+    fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
   }
 })

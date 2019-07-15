@@ -11,6 +11,7 @@ import { Color } from '../../utils/Colors';
 import {
     ExpenceScreenLoad
 } from '../../Actions';
+import { styles } from '../../Style/addExpanceStyles'
 import Ripple from 'react-native-material-ripple';
 
 
@@ -30,15 +31,13 @@ class AddExpenceScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => navigator.pop()}>
-                        <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+                        <View style={styles.backIcon}>
                             <Icon name="arrow-back" size={22}/>
                         </View>
                 </Ripple>
             ),
             title: "Add Expense",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTitleStyle
         }
     }
     componentDidMount() {
@@ -57,12 +56,14 @@ class AddExpenceScreen extends Component {
         }) 
     }
     handleButtonPress = (button) => {
+
         const { isResult } = this.state;
 
         let { first, second, operator } = this.state;
 
         switch (button) {
             case '0':
+            if(first.length < 6){
                 if (!isResult) {
                     if (!operator) {
                         if (first[0] !== '0' || first.length !== 1) {
@@ -84,7 +85,7 @@ class AddExpenceScreen extends Component {
                         isResult: false,
                     });
                 }
-
+            }
                 break;
             case '1':
             case '2':
@@ -96,6 +97,7 @@ class AddExpenceScreen extends Component {
             case '8':
             case '9':
             case '00':
+            if(first.length < 6){
                 if (!isResult) {
                     if (!operator) {
                         if (first[0] === '0' && first.length === 1) {
@@ -108,7 +110,6 @@ class AddExpenceScreen extends Component {
                     } else {
                         second += button;
                     }
-
                     this.setState({ first, second, operator });
                 } else {
                     this.setState({
@@ -119,9 +120,10 @@ class AddExpenceScreen extends Component {
                         isResult: false,
                     });
                 }
-
+            }
                 break;
             case '.':
+            if(first.length < 6){
                 if (!operator) {
                     if (!first.includes('.')) {
                         first += button;
@@ -129,13 +131,12 @@ class AddExpenceScreen extends Component {
                 } else if (!second.includes('.')) {
                     second += button;
                 }
-
                 this.setState({ first, second, operator });
-
+            }
                 break;
             case 'C':
                 this.setState({
-                    first: ""
+                    first: "0"
                 })
                 break;
             case 'CE':

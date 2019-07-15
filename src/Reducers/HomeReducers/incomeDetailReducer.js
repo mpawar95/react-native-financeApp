@@ -26,7 +26,7 @@ const INITIAL_STATE = {
 	selected_index: "",
 	selected_name: "Account",
 	selected_icon_name:"",
-	selected_icon_color: "",
+	selected_icon_color: "#000000",
 	selected_key:"",
 	todayDate: moment().format('MMMM DD') + ", " + moment().format('YYYY'),
 	account_Data: [],

@@ -42,15 +42,13 @@ class MoneyTransferScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => params.onHandleBack()}>
-                        <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+                        <View style={styles.backIcon}>
                             <Icon name="arrow-back" size={22} />
                         </View>
                 </Ripple>
             ),
             title: "Transfer",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTextStyle
         }
     }
     onHandleBack=()=>{

@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Platform,
   TouchableWithoutFeedback,
-  AsyncStorage
+  Image
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { ConfirmDialog, Dialog } from 'react-native-simple-dialogs';
@@ -93,7 +93,7 @@ class SettingScreen extends Component {
       <View>
         {
           this.props.is_displaylist ?
-            <View style={{ width: "100%", height: 135, borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
+            <View style={styles.displayList}>
               <ScrollView>
                 <FlatList
                   extraData={this.props.selected_index}
@@ -182,19 +182,25 @@ class SettingScreen extends Component {
             </TouchableOpacity>
             {this._renderDisplayList()}
           </View>
-          <View style={{ flexDirection: "row", zIndex: -1, marginTop: 10, height: 35, justifyContent: 'space-around' }} onStartShouldSetResponder={(evt) => this.props.settingVisibilityList(false)}>
+          <View style={styles.viewButton} onStartShouldSetResponder={(evt) => this.props.settingVisibilityList(false)}>
             <TouchableWithoutFeedback onPress={() => this.modalVisible()}>
-              <View style={{ flex: 1, backgroundColor: Color.PRIMARY, justifyContent: 'center', alignItems: 'center', marginRight: 10 }}>
-                <Text style={{ fontWeight: "700", color: "white" }}>Generate data</Text>
+              <View style={styles.generateButton}>
+                <Text style={styles.textStyle}>Generate data</Text>
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => this.resetModalVisible()}>
-              <View style={{ flex: 1, backgroundColor: Color.RED_COLOR, justifyContent: 'center', alignItems: 'center', marginLeft: 10 }}>
-                <Text style={{ fontWeight: "700", color: "white" }}>Reset data</Text>
+              <View style={styles.resetButton}>
+                <Text style={styles.textStyle}>Reset data</Text>
               </View>
             </TouchableWithoutFeedback>
             {this.generateDataDialogOpen()}
             {this.resetDataDialogOpen()}
+          </View>
+          <View style={styles.bottomCopyright}>
+              <Text>Made with </Text>
+              <Image source={require("../../../assets/images/heart.png")} style={{height:20,width:20}} />
+              <Text> by </Text>
+              <Text style={styles.Peri}>Peri</Text><Text style={styles.Fy}>Fy</Text>
           </View>
         </View>
       </SafeAreaView>

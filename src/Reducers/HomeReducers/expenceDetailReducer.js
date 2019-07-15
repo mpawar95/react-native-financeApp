@@ -43,7 +43,7 @@ const INITIAL_STATE = {
 	],
 	selected_name: "Account",
 	selected_icon_name: "",
-	selected_icon_color: "",
+	selected_icon_color: "#000000",
 	selected_index: 0,
 	selected_key: "",
 	selected_cat_name: "Category",

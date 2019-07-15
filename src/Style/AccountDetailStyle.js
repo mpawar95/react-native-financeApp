@@ -67,5 +67,9 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     bottom: 5
-},
+  },
+  backIcon:{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' },
+  headerTitleStyle:{
+    fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
+  },
 })

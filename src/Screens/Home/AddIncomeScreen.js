@@ -31,15 +31,13 @@ class AddIncomeScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => navigator.pop()}>
-                    <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+                    <View style={styles.backIcon}>
                         <Icon name="arrow-back" size={22} />
                     </View>
                 </Ripple>
             ),
             title: "Add Income",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTitleStyle
         }
     }
     componentDidMount() {
@@ -66,6 +64,7 @@ class AddIncomeScreen extends Component {
 
         switch (button) {
             case '0':
+            if(first.length < 6){
                 if (!isResult) {
                     if (!operator) {
                         if (first[0] !== '0' || first.length !== 1) {
@@ -87,6 +86,7 @@ class AddIncomeScreen extends Component {
                         isResult: false,
                     });
                 }
+            }
                 break;
             case '1':
             case '2':
@@ -98,6 +98,7 @@ class AddIncomeScreen extends Component {
             case '8':
             case '9':
             case '00':
+            if(first.length < 6){
                 if (!isResult) {
                     if (!operator) {
                         if (first[0] === '0' && first.length === 1) {
@@ -120,9 +121,10 @@ class AddIncomeScreen extends Component {
                         isResult: false,
                     });
                 }
-
+            }
                 break;
             case '.':
+            if(first.length < 6){
                 if (!operator) {
                     if (!first.includes('.')) {
                         first += button;
@@ -131,6 +133,7 @@ class AddIncomeScreen extends Component {
                     second += button;
                 }
                 this.setState({ first, second, operator });
+            }
                 break;
             case 'C':
                 this.setState({

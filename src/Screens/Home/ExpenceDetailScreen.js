@@ -40,15 +40,13 @@ class ExpenceDetailScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => params.onHandleBack()}>
-                    <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+                    <View style={styles.backIcon}>
                         <Icon name="arrow-back" size={22} />
                     </View>
                 </Ripple>
             ),
             title: "Expence Detail",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTitleStyle
         }
     }
     onHandleBack = () => {
@@ -79,7 +77,7 @@ class ExpenceDetailScreen extends Component {
         return (
             <View style={{}}>
                 <TouchableOpacity onPress={() => this.onPressSelectedItem(item)}>
-                    <View style={{ flex: 1, padding: 14, backgroundColor: "white", flexDirection: 'row' }}>
+                    <View style={{ flex: 1, padding: 14, backgroundColor: Color.BACKGROUND_COLOR, flexDirection: 'row' }}>
                         <View style={{ height: 15, width: 15, borderRadius: 15 / 2, backgroundColor: item.item.selected_color_icon, alignSelf: 'center' }}></View>
                         <Text style={{ marginLeft: 5 }}>{item.item.account_name}</Text>
                     </View>
@@ -240,7 +238,7 @@ class ExpenceDetailScreen extends Component {
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1 }}>
                                             {
                                                 this.props.is_category_selected ? <Icon name={this.props.selected_cat_icon_name} color={this.props.selected_icon_color} />
-                                                    : <Icon name={items === undefined ? "" : "home"} color={this.props.selected_icon_color} />
+                                                    : <Icon name={items === undefined ? null : "home"} color={this.props.selected_icon_color} />
                                             }
                                             <Text style={{ color: "black" }}>{this.props.selected_cat_name ? this.props.selected_cat_name : "Category"}</Text>
                                         </View>

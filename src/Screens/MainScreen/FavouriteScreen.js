@@ -128,7 +128,6 @@ class FavouriteScreen extends Component {
     )
   }
   datePickerDialog = () => {
-    
     this.props.favouriteDateRangePicker(true)
   }
   onSelect=(index, value)=>{

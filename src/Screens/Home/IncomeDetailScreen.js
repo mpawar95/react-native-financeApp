@@ -39,15 +39,13 @@ class IncomeDetailScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => params.onHandleBack()}>
-                    <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center'}}>
+                    <View style={styles.backIcon}>
                         <Icon name="arrow-back" size={22} />
                     </View>
                 </Ripple>
             ),
             title: "Income Detail",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTextStyle
         }
     }
     onHandleBack=()=>{
@@ -102,7 +100,7 @@ class IncomeDetailScreen extends Component {
             <View>
                 {
                     this.props.is_visible_flatlist ?
-                        <View style={{ height: 150, width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
+                        <View style={styles.accountlist}>
                             <ScrollView>
                                 <FlatList
                                     extraData={this.props.selected_index}
@@ -250,19 +248,17 @@ class IncomeDetailScreen extends Component {
                             <View style={[styles.viewStyle, { borderColor: this.props.is_category_selected ? Color.PRIMARY : "#000000", zIndex: 0 }]}>
                                 <View style={{ flexDirection: 'row', padding: 14 }}>
                                     <View style={styles.categoryItem}>
-                                        <View style={styles.categoryItem}>
-                                            {
-                                                this.props.is_category_selected ?
-                                                    <Icon
-                                                        name={this.props.selected_cat_icon_name} color={this.props.selected_icon_color} />
-                                                    :
-                                                    <Icon name={items === undefined ? "" : "home"} color={this.props.selected_icon_color} />
-                                            }
-                                            <Text style={{ color: "#000000" }}>{this.props.selected_cat_name ? this.props.selected_cat_name : "Category"}</Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'flex-end', }}>
-                                            <Icon name="home" />
-                                        </View>
+                                        {
+                                            this.props.is_category_selected ?
+                                                <Icon
+                                                    name={this.props.selected_cat_icon_name} color={this.props.selected_icon_color} />
+                                                :
+                                                <Icon name={items === undefined ? null : "home"} color={this.props.selected_icon_color} />
+                                        }
+                                        <Text style={{ color: "#000000" }}>{this.props.selected_cat_name ? this.props.selected_cat_name : "Category"}</Text>
+                                    </View>
+                                    <View style={{ justifyContent: 'flex-end', }}>
+                                        <Icon name="home" />
                                     </View>
                                 </View>
                             </View>

@@ -23,7 +23,7 @@ export const receivePropsCategoryLoad=()=>{
 export const getCategories=(cat_type)=>{
     return dispatch => {
         var items = [];
-        db.ref('/Category/').orderByChild("category_type").equalTo(cat_type).once('value', function (snapshot) {
+        db.ref('/Category/').orderByChild("category_type").equalTo(cat_type).once('value',async function (snapshot) {
             snapshot.forEach(child => {
                 items.push({
                     id: child.key,
@@ -33,12 +33,12 @@ export const getCategories=(cat_type)=>{
                 })
                 return items
             });
-
+            if (items != null) {
+                dispatch({ type: ADD_CATEGORY_FETCH_SUCCESS, payload: items })
+            } else {
+                dispatch({ type: ADD_CATEGORY_FETCH_FAIL, payload: "Something Wrong" })
+            }
         })
-        if (items != null) {
-            dispatch({ type: ADD_CATEGORY_FETCH_SUCCESS, payload: items })
-        } else {
-            dispatch({ type: ADD_CATEGORY_FETCH_FAIL, payload: "Something Wrong" })
-        }
+       
     }
 }

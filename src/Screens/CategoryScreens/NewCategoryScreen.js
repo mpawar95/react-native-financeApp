@@ -35,7 +35,7 @@ class NewCategoryScreen extends Component {
         return {
             headerLeft: (
                 <Ripple onPress={() => params.onHandleBack()}>
-                    <View style={{ height: 40, width: 40, alignContent: 'center', justifyContent: 'center' }}>
+                    <View style={styles.backIcon}>
                         <View style={{}}>
                             <Icon name="arrow-back" size={22} />
                         </View>
@@ -43,9 +43,7 @@ class NewCategoryScreen extends Component {
                 </Ripple>
             ),
             title: "New Category",
-            headerTitleStyle: {
-                fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
-            }
+            headerTitleStyle: styles.headerTitleStyle
         }
     }
     onHandleBack=()=>{

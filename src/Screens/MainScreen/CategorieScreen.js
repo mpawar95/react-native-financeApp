@@ -4,11 +4,10 @@ import { connect } from "react-redux";
 import {
   Text,
   View,
-  ScrollView,
   FlatList,
   TouchableWithoutFeedback
 } from 'react-native';
-import { DrawerItems, SafeAreaView } from 'react-navigation';
+import { SafeAreaView } from 'react-navigation';
 import {MainHeader} from '../../Components';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import { Color } from '../../utils/Colors';

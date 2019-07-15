@@ -400,6 +400,7 @@ class HomeScreen extends React.Component {
         <View style={styles.renderFlatList}>
           {this.renderFlatList()}
         </View>
+        {this.renderSeparator()}
         <View style={{ zIndex: -1 }} >
           {this.selectionList()}
           <View style={styles.thirdHeaderTransaction}>
@@ -437,7 +438,7 @@ class HomeScreen extends React.Component {
           
         </View>
 
-        <ActionButton buttonColor={Color.PRIMARY}>
+        <ActionButton buttonColor={Color.PRIMARY} buttonText="+/-">
           <ActionButton.Item buttonColor={Color.RED_COLOR} title="Add Expence" onPress={() => this.props.navigation.navigate("AddExpence")}>
             <Text style={styles.Floatminus}>-</Text>
           </ActionButton.Item>
