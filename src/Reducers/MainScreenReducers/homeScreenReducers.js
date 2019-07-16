@@ -38,11 +38,6 @@ const INITIAL_STATE = {
 	dialogVisible: false,
 	is_selected: false,
 	selectedDate:"",
-	// data: [
-	// 	{ select: "Week", key: 0 },
-	// 	{ select: "Month", key: 1 },
-	// 	{ select: "Year", key: 2 },
-	// ],
 	data: [
 		"Week",
 		"Month",
@@ -65,7 +60,7 @@ export default (state = INITIAL_STATE, action) => {
 		case ITEM_FLATLIST_SELECTED:
 			return { ...state, selectedFlatListName: action.payload.item_name, selectedFlatListIndex: action.payload.item_index }
 		case HOME_ACCOUNT_FETCH_LIST_SUCCESS:
-			return { ...state, account_list: action.payload.items, account_list_count: action.payload.length ,totalAmount: action.payload.total}
+			return { ...state, account_list: action.payload.items, account_list_count: action.payload.items.length ,totalAmount: action.payload.total}
 		case HOME_ACCOUNT_FETCH_LIST_FAIL:
 			return { ...state, error: action.payload }
 		case VISIBLE_LIST:
@@ -78,7 +73,6 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				income_list: action.payload,
-				// refreshing:true
 			}
 		case INCOME_FETCH_LIST_FAIL:
 			return {

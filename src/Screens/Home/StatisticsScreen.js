@@ -214,9 +214,9 @@ class StatisticsScreen extends Component {
                     />
                     {
                         this.props.selectedIndex == 0 ?
-                            <Text style={{ color: Color.PRIMARY, bottom: 25, left: 60, fontSize: 18 }}>$0</Text>
+                            <Text style={[styles.StatisticEmpty, { color: Color.PRIMARY }]}>$0</Text>
                             :
-                            <Text style={{ color: Color.RED_COLOR, bottom: 25, left: 60, fontSize: 18 }}>$0</Text>
+                            <Text style={[styles.StatisticEmpty, { color: Color.RED_COLOR }]}>$0</Text>
                     }
                 </View>
         )

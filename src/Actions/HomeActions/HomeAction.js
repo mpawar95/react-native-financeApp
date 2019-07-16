@@ -68,16 +68,17 @@ export const homeAccountListFetch = () => {
                     initial_balance: child.val().initial_balance,
                     selected_color_icon: child.val().selected_color_icon
                 })
-                const payload={
-                    items:items,
-                    total:total
-                }
-                if (items != null) {
-                    dispatch({ type: HOME_ACCOUNT_FETCH_LIST_SUCCESS, payload: payload })
-                } else {
-                    dispatch({ type: HOME_ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" })
-                }
+                return items
             });
+            const payload={
+                items:items,
+                total:total
+            }
+            if (items != null) {
+                dispatch({ type: HOME_ACCOUNT_FETCH_LIST_SUCCESS, payload: payload })
+            } else {
+                dispatch({ type: HOME_ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" })
+            }
         })
     }
 }

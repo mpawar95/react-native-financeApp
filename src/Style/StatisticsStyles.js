@@ -45,5 +45,8 @@ export const styles = StyleSheet.create({
     headerTitleStyle:{
         fontSize: 17, color: "#636863", alignContent: 'center', justifyContent: 'center', marginLeft: Platform.OS === "ios" ? 0 : -20
     },
-    selectionList:{ flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 }
+    selectionList:{ flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 },
+    StatisticEmpty:{
+        bottom: 24, left: 61, fontSize: 18, fontWeight:"600"
+    }
 })
