@@ -50,21 +50,23 @@ export const onPressMoneyTransferSelectedItem2 = (item_acc_name, item_icon, item
 
 export const transferAccountListFetch = () => {
     return dispatch => {
-        var items = [];
-        db.ref('/newAccount/').on('value', function (snapshot) {
-            snapshot.forEach(child => {
-                items.push({
-                    id: child.key,
-                    account_name: child.val().account_name,
-                    initial_balance: child.val().initial_balance,
-                    selected_color_icon: child.val().selected_color_icon
-                })
-                if (items != null) {
-                    dispatch({ type: TRANSFER_ACCOUNT_FETCH_LIST_SUCCESS, payload: items })
-                } else {
-                    dispatch({ type: TRANSFER_ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" })
-                }
-            });
+        return new Promise((resolve, reject) => {
+            var items = [];
+            db.ref('/newAccount/').on('value', function (snapshot) {
+                snapshot.forEach(child => {
+                    items.push({
+                        id: child.key,
+                        account_name: child.val().account_name,
+                        initial_balance: child.val().initial_balance,
+                        selected_color_icon: child.val().selected_color_icon
+                    })
+                    if (items != null) {
+                        resolve(dispatch({ type: TRANSFER_ACCOUNT_FETCH_LIST_SUCCESS, payload: items }))
+                    } else {
+                        reject(dispatch({ type: TRANSFER_ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" }))
+                    }
+                });
+            })
         })
     }
 }
@@ -116,50 +118,52 @@ export const onSubmitTransferAmount = (
     navigator
 ) => {
     return dispatch => {
-        if (!from_id && !to_id && !description && !createOnDate && !amount && !selected_color) {
-            dispatch({ type: TANSFER_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
-        } else {
-            db.ref('/newAccount/').child(from_id).once('value', function (snapshot) {
-                db.ref('/newAccount/').child(from_id).update({
-                    initial_balance: parseInt(snapshot.val().initial_balance) - parseInt(amount)
-                })
-            })
-            db.ref('/newAccount/').child(to_id).once('value', function (snapshot) {
-                db.ref('/newAccount/').child(to_id).update({
-                    initial_balance: parseInt(snapshot.val().initial_balance) + parseInt(amount)
-                })
-            })
-            db.ref("/addNewIncome").push({
-                newIncome: amount,
-                accountName: description,
-                newDescription:newDescription,
-                categoryName: "Transfer",
-                createdOnDate: createOnDate,
-                time: moment().format('MMMM DD') + ", " + moment().format('YYYY') + " " + moment().format("hh:mm:ss"),
-                Notes: notes ? notes : "",
-                icon_color: selected_color,
-                is_income: false,
-                is_expance: false,
-                is_transfer: true,
-                is_favourite: false
-            }).then(res => {
-                transferIncomeDetailSuccess(dispatch, navigator)
-            }).catch(err => {
-                transferIncomeDetailFail(dispatch, navigator)
-            })
-        }
+        return new Promise((resolve,reject)=>{
+                if (!from_id && !to_id && !description && !createOnDate && !amount && !selected_color) {
+                    reject(dispatch({ type: TANSFER_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
+                } else {
+                    db.ref('/newAccount/').child(from_id).once('value', function (snapshot) {
+                        db.ref('/newAccount/').child(from_id).update({
+                            initial_balance: parseInt(snapshot.val().initial_balance) - parseInt(amount)
+                        })
+                    })
+                    db.ref('/newAccount/').child(to_id).once('value', function (snapshot) {
+                        db.ref('/newAccount/').child(to_id).update({
+                            initial_balance: parseInt(snapshot.val().initial_balance) + parseInt(amount)
+                        })
+                    })
+                    db.ref("/addNewIncome").push({
+                        newIncome: amount,
+                        accountName: description,
+                        newDescription:newDescription,
+                        categoryName: "Transfer",
+                        createdOnDate: createOnDate,
+                        time: moment().format('MMMM DD') + ", " + moment().format('YYYY') + " " + moment().format("hh:mm:ss"),
+                        Notes: notes ? notes : "",
+                        icon_color: selected_color,
+                        is_income: false,
+                        is_expance: false,
+                        is_transfer: true,
+                        is_favourite: false
+                    }).then(res => {
+                        transferIncomeDetailSuccess(dispatch, navigator,resolve,reject)
+                    }).catch(err => {
+                        transferIncomeDetailFail(dispatch, navigator,resolve,reject)
+                    })
+                }
+        })
     }
 }
-export const transferIncomeDetailSuccess = (dispatch, navigator) => {
-    dispatch({ type: TANSFER_ADD_INCOME_DETAIL_SUCCESS, payload: "success" })
+export const transferIncomeDetailSuccess = (dispatch, navigator,resolve,reject) => {
+    resolve(dispatch({ type: TANSFER_ADD_INCOME_DETAIL_SUCCESS, payload: "success" }))
     try {
         navigator.navigate("Home");
         navigator.reset()
     }
     catch (error) {
-        dispatch({ type: TANSFER_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
+        reject(dispatch({ type: TANSFER_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
     }
 }
-export const transferIncomeDetailFail = (dispatch, navigator) => {
-    dispatch({ type: TANSFER_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
+export const transferIncomeDetailFail = (dispatch, navigator,resolve,reject) => {
+    reject(dispatch({ type: TANSFER_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
 }

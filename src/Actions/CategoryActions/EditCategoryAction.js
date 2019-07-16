@@ -60,30 +60,32 @@ export const deleteCategory=(id,navigation)=>{
 }
 
 
-export const updateCategory=(id,categoryName,selected_cat_icon_name,navigation)=>{
-    return dispatch=>{    
-    db.ref('/Category/').child(id).update({
-            category_name:categoryName,
-            selected_Icon:selected_cat_icon_name
-        }).then((success)=>{
-            updateItemSuccess(dispatch,navigation)
-        }).catch(error=>{
-            updateItemFail(dispatch,navigation)
-            return {type: UPDATE_ITEM_FAIL }
+export const updateCategory = (id, categoryName, selected_cat_icon_name, navigation) => {
+    return dispatch => {
+        return new Promise((resolve, reject) => {
+            db.ref('/Category/').child(id).update({
+                category_name: categoryName,
+                selected_Icon: selected_cat_icon_name
+            }).then((success) => {
+                updateItemSuccess(dispatch, navigation, resolve, reject)
+            }).catch(error => {
+                updateItemFail(dispatch, navigation, resolve, reject)
+            })
         })
+
     }
 }
 
-export const updateItemSuccess=(dispatch,navigation)=>{
-    dispatch( {type: UPDATE_ITEM_SUCCESS })
+export const updateItemSuccess=(dispatch,navigation,resolve, reject)=>{
+    resolve(dispatch( {type: UPDATE_ITEM_SUCCESS }))
     try{
         navigation.navigator.pop()
     }
     catch(error){
-
+        reject(dispatch( {type: UPDATE_ITEM_FAIL }))
     }
     
 }
-export const updateItemFail=(dispatch,navigation)=>{
-    dispatch( {type: UPDATE_ITEM_FAIL })
+export const updateItemFail=(dispatch,navigation,resolve, reject)=>{
+    reject(dispatch( {type: UPDATE_ITEM_FAIL }))
 }

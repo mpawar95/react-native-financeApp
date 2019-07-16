@@ -6,8 +6,6 @@ import {
     VISIBLE_FAV_LIST,
     INCOME_FAV_FETCH_LIST_SUCCESS,
     INCOME_FAV_FETCH_LIST_FAIL,
-    DELETE_FAV_ITEM_SUCCESS,
-    DELETE_FAV_ITEM_FAIL,
     FAVOURITE_SELECTED_MONEY_ICON,
     FAVOURITE_DATE_RANGE_PICKER_DIALOG_VISIBLE,
     FAVOURITE_FLATLIST_ITEM_SELECTED,
@@ -63,35 +61,37 @@ export const selectedFavouriteRange=(range)=>{
 }
 export const getFavIncome = (from_date, to_date) => {
     return dispatch => {
-        db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).on('value', function (snapshot) {
-            if (snapshot.val()) {
-                var incomeItems = [];
-                snapshot.forEach(child => {
-                    if (child.val().is_favourite) {
-                        incomeItems.push({
-                            id: child.key,
-                            Notes: child.val().Notes,
-                            accountName: child.val().accountName,
-                            categoryName: child.val().categoryName,
-                            createdOnDate: child.val().createdOnDate,
-                            icon_color: child.val().icon_color,
-                            newIncome: child.val().newIncome,
-                            time: child.val().time,
-                            is_income: child.val().is_income,
-                            is_expance: child.val().is_expance,
-                            is_transfer: child.val().is_transfer,
-                            is_favourite: child.val().is_favourite,
-                        })
-                    }
-                    if (incomeItems.length != 0) {
-                        dispatch({ type: INCOME_FAV_FETCH_LIST_SUCCESS, payload: incomeItems })
-                    } else {
-                        dispatch({ type: INCOME_FAV_FETCH_LIST_FAIL, payload: null })
-                    }
-                })
-            } else {
-                dispatch({ type: INCOME_FAV_FETCH_LIST_FAIL, payload: null })
-            }
+        return new Promise((resolve, reject) => {
+            db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).on('value', function (snapshot) {
+                if (snapshot.val()) {
+                    var incomeItems = [];
+                    snapshot.forEach(child => {
+                        if (child.val().is_favourite) {
+                            incomeItems.push({
+                                id: child.key,
+                                Notes: child.val().Notes,
+                                accountName: child.val().accountName,
+                                categoryName: child.val().categoryName,
+                                createdOnDate: child.val().createdOnDate,
+                                icon_color: child.val().icon_color,
+                                newIncome: child.val().newIncome,
+                                time: child.val().time,
+                                is_income: child.val().is_income,
+                                is_expance: child.val().is_expance,
+                                is_transfer: child.val().is_transfer,
+                                is_favourite: child.val().is_favourite,
+                            })
+                        }
+                        if (incomeItems.length != 0) {
+                            resolve(dispatch({ type: INCOME_FAV_FETCH_LIST_SUCCESS, payload: incomeItems }))
+                        } else {
+                            reject(dispatch({ type: INCOME_FAV_FETCH_LIST_FAIL, payload: null }))
+                        }
+                    })
+                } else {
+                    reject(dispatch({ type: INCOME_FAV_FETCH_LIST_FAIL, payload: null }))
+                }
+            })
         })
     }
 }

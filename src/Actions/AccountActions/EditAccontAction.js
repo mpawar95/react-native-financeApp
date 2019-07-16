@@ -1,4 +1,3 @@
-import { AsyncStorage } from 'react-native';
 import {
     EDIT_ACCOUNT_INPUT_CHANGE,
     GET_ACCOUNT_NAME_SUCCESS,
@@ -27,52 +26,55 @@ export const onPressEditAccountSelectedItem=(item_key,item_color)=>{
 }
 export const getAccount=(id)=>{
     return dispatch=>{
-        db.ref('/newAccount/').child(id).once('value', function (snapshot) {
-            let response = snapshot.val();
-            let oldAccountName = response.account_name;
-            let oldpickColor = response.selected_color_icon;
-            let oldindexColor =response.selected_color_index;
-            if (!response) {
-                dispatch({ type: GET_ACCOUNT_NAME_FAIL, payload: "Something Wrong" })
-            } else {
-                dispatch({ 
-                    type: GET_ACCOUNT_NAME_SUCCESS, 
-                    account_name: oldAccountName, 
-                    account_pick_color:oldpickColor, 
-                    account_color_index: oldindexColor
-                })
-            }
+        return new Promise((resolve,reject)=>{
+            db.ref('/newAccount/').child(id).once('value', function (snapshot) {
+                let response = snapshot.val();
+                let oldAccountName = response.account_name;
+                let oldpickColor = response.selected_color_icon;
+                let oldindexColor = response.selected_color_index;
+                if (!response) {
+                    reject(dispatch({ type: GET_ACCOUNT_NAME_FAIL, payload: "Something Wrong" }))
+                } else {
+                    resolve(dispatch({
+                        type: GET_ACCOUNT_NAME_SUCCESS,
+                        account_name: oldAccountName,
+                        account_pick_color: oldpickColor,
+                        account_color_index: oldindexColor
+                    }))
+                }
+            })
         })
     }
 }
 
-export const updateAccount=(id,pick_color,accountInput,navigation)=>{
-    return dispatch=>{    
-    db.ref('/newAccount/').child(id).update({
-            account_name:accountInput,
-            selected_color_icon:pick_color
-        }).then((success)=>{
-            updateSuccess(dispatch,navigation)
-            
-        }).catch(error=>{
-            updateFail(dispatch,navigation)
-            return {type: UPDATE_ITEM_FAIL }
+export const updateAccount = (id, pick_color, accountInput, navigation) => {
+    return dispatch => {
+        return new Promise((resolve, reject) => {
+            db.ref('/newAccount/').child(id).update({
+                account_name: accountInput,
+                selected_color_icon: pick_color
+            }).then((success) => {
+                updateSuccess(dispatch, navigation, resolve, reject)
+
+            }).catch(error => {
+                updateFail(dispatch, navigation, resolve, reject)
+            })
         })
     }
 }
 
-updateSuccess=(dispatch,navigation)=>{
-    dispatch( {type: UPDATE_ITEM_SUCCESS })
-    try{
+updateSuccess = (dispatch, navigation, resolve, reject) => {
+    resolve(dispatch({ type: UPDATE_ITEM_SUCCESS }))
+    try {
         navigation.pop()
     }
-    catch(error){
-
+    catch (error) {
+        reject(dispatch({ type: UPDATE_ITEM_FAIL }))
     }
-    
+
 }
-updateFail=(dispatch,navigation)=>{
-    dispatch( {type: UPDATE_ITEM_FAIL })
+updateFail = (dispatch, navigation, resolve, reject) => {
+    reject(dispatch({ type: UPDATE_ITEM_FAIL }))
 }
 
 

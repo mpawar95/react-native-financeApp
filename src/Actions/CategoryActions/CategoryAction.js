@@ -20,25 +20,26 @@ export const receivePropsCategoryLoad=()=>{
     }
 }
 
-export const getCategories=(cat_type)=>{
+export const getCategories = (cat_type) => {
     return dispatch => {
-        var items = [];
-        db.ref('/Category/').orderByChild("category_type").equalTo(cat_type).once('value',async function (snapshot) {
-            snapshot.forEach(child => {
-                items.push({
-                    id: child.key,
-                    category_name: child.val().category_name,
-                    category_type: child.val().category_type,
-                    selected_Icon: child.val().selected_Icon
-                })
-                return items
-            });
-            if (items != null) {
-                dispatch({ type: ADD_CATEGORY_FETCH_SUCCESS, payload: items })
-            } else {
-                dispatch({ type: ADD_CATEGORY_FETCH_FAIL, payload: "Something Wrong" })
-            }
+        return new Promise((resolve, reject) => {
+            var items = [];
+            db.ref('/Category/').orderByChild("category_type").equalTo(cat_type).once('value', async function (snapshot) {
+                snapshot.forEach(child => {
+                    items.push({
+                        id: child.key,
+                        category_name: child.val().category_name,
+                        category_type: child.val().category_type,
+                        selected_Icon: child.val().selected_Icon
+                    })
+                    return items
+                });
+                if (items != null) {
+                    resolve(dispatch({ type: ADD_CATEGORY_FETCH_SUCCESS, payload: items }))
+                } else {
+                    reject(dispatch({ type: ADD_CATEGORY_FETCH_FAIL, payload: "Something Wrong" }))
+                }
+            })
         })
-       
     }
 }

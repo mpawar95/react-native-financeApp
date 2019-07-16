@@ -24,7 +24,6 @@ import {
     getPage,
     getInformation,
     statisticsScreenLoad,
-    statisticsGetAccountData,
     onPressStatisticsItem,
     onPressStatisticsSelectedName,
     statisticsDateRangePicker,
@@ -78,7 +77,6 @@ class StatisticsScreen extends Component {
         this.props.getInformation(0, convertMyDate(today), convertMyDate(today))
         this.props.getStatiscticsDate({ prop: "today" })
         this.props.statisticsScreenLoad()
-        this.props.statisticsGetAccountData()
     }
     onPressListDisplay = () => {
         this.props.visibilityStatList(true)
@@ -407,7 +405,6 @@ export default connect(mapStateToProps, {
     getPage,
     getInformation,
     statisticsScreenLoad,
-    statisticsGetAccountData,
     onPressStatisticsItem,
     onPressStatisticsSelectedName,
     statisticsDateRangePicker,

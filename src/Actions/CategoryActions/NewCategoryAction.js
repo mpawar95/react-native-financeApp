@@ -42,22 +42,23 @@ export const onPressCatSelectedItemName=(item_icon,item_key)=>{
     }
     return { type : CATEGORY_FLATLIST_SELECTED_CAT_ITEM, payload:payload}
 }
-export const addNewCategory=(cat_name,icon,cat_type_name,navigator)=>{
-    return dispatch=>{
-        db.ref('/Category/').push({
-            category_name: cat_name,
-            selected_Icon:icon,
-            category_type: cat_type_name,
-        }).then((response) => {
-            createCategorySuccess(dispatch, navigator)
-        }).catch((error) => {
-            dispatch({ type: ADD_NEW_CATEGORY_FAIL ,payload: error })
+export const addNewCategory = (cat_name, icon, cat_type_name, navigator) => {
+    return dispatch => {
+        return new Promise((resolve, reject) => {
+            db.ref('/Category/').push({
+                category_name: cat_name,
+                selected_Icon: icon,
+                category_type: cat_type_name,
+            }).then((response) => {
+                createCategorySuccess(dispatch, navigator, resolve, reject)
+            }).catch((error) => {
+                rejectdispatch({ type: ADD_NEW_CATEGORY_FAIL, payload: error })
+            })
         })
     }
-
 }
 
-export const createCategorySuccess=(dispatch,navigator)=>{
-    dispatch({ type: ADD_NEW_CATEGORY_SUCCESS})
+export const createCategorySuccess=(dispatch,navigator,resolve, reject)=>{
+    resolve(dispatch({ type: ADD_NEW_CATEGORY_SUCCESS}))
     navigator.navigator.navigate("Categories")
 }

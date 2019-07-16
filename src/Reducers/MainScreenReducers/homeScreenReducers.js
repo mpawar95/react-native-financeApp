@@ -48,7 +48,11 @@ const INITIAL_STATE = {
 	seatedPropsName: "",
 	seatedPropsKey:0
 };
-
+const splitTo = (arr, n = 3) => arr.reduce((accumulator, currentValue, currentIndex) => {
+	if (currentIndex % n === 0) accumulator.push([]);
+	accumulator[accumulator.length - 1].push(currentValue);
+	return accumulator;
+}, []);
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case HOME_RECIEVE_PROPS:
@@ -60,6 +64,7 @@ export default (state = INITIAL_STATE, action) => {
 		case ITEM_FLATLIST_SELECTED:
 			return { ...state, selectedFlatListName: action.payload.item_name, selectedFlatListIndex: action.payload.item_index }
 		case HOME_ACCOUNT_FETCH_LIST_SUCCESS:
+			const newItems = splitTo(action.payload.items)
 			return { ...state, account_list: action.payload.items, account_list_count: action.payload.items.length ,totalAmount: action.payload.total}
 		case HOME_ACCOUNT_FETCH_LIST_FAIL:
 			return { ...state, error: action.payload }

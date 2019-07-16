@@ -199,10 +199,11 @@ class MoneyTransferScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }} >
-            <View  style={{ flex: 1  }} onStartShouldSetResponder={(evt) => {
-                Keyboard.dismiss()
-                this.handleEventsClose()}}>
-                <View style={{ margin: 10, borderWidth: Platform.OS === "ios" ? 0.4 : 0.4,backgroundColor: this.props.is_selected1 ? this.props.selected_icon_color : Color.WHITE_COLOR,borderRadius:6,flexDirection:"column" }} onStartShouldSetResponder={(evt) => this.props.transferVisibilityList(false)}>
+                <View style={{ flex: 1 }} onStartShouldSetResponder={(evt) => {
+                    Keyboard.dismiss()
+                    this.handleEventsClose()
+                }}>
+                    <View style={{ margin: 10, borderWidth: Platform.OS === "ios" ? 0.4 : 0.4,backgroundColor: this.props.is_selected1 ? this.props.selected_icon_color : Color.WHITE_COLOR,borderRadius:6,flexDirection:"column" }} onStartShouldSetResponder={(evt) => this.props.transferVisibilityList(false)}>
                     <View style={{ margin:10}}>
                         <TouchableOpacity onPress={() => this.onDropDownPress()}>
                             <View style={[styles.viewStyle, { borderColor: this.props.is_selected ? Color.PRIMARY : "black", zIndex: 0 }]}>

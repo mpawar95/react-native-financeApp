@@ -107,63 +107,58 @@ export const expenceIncomeDetail = (
     selected_key
 ) => {
     return dispatch => {
-        if (!income && !selected_name && !selected_cat_name && !todayDate) {
-            dispatch({ type: EXPENCE_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
-        } else {
-            let Data = {
-                newIncome: income,
-                accountName: selected_name,
-                categoryName: selected_cat_name,
-                createdOnDate: todayDate,
-                time: moment().format('MMMM DD') + ", " + moment().format('YYYY'),
-                Notes: notesValue
-            }
-            db.ref('/newAccount/').child(selected_key).once('value', function (snapshot) {
-                db.ref('/newAccount/').child(selected_key).update({
-                    initial_balance: parseInt(snapshot.val().initial_balance) - parseInt(income)
+        return new Promise((resolve, reject) => {
+            if (!income && !selected_name && !selected_cat_name && !todayDate) {
+                reject(dispatch({ type: EXPENCE_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
+            } else {
+                let Data = {
+                    newIncome: income,
+                    accountName: selected_name,
+                    categoryName: selected_cat_name,
+                    createdOnDate: todayDate,
+                    time: moment().format('MMMM DD') + ", " + moment().format('YYYY'),
+                    Notes: notesValue
+                }
+                db.ref('/newAccount/').child(selected_key).once('value', function (snapshot) {
+                    db.ref('/newAccount/').child(selected_key).update({
+                        initial_balance: parseInt(snapshot.val().initial_balance) - parseInt(income)
+                    })
                 })
-            })
 
-            db.ref("/addNewIncome").push({
-                newIncome: income,
-                accountName: selected_name,
-                categoryName: selected_cat_name,
-                createdOnDate: todayDate,
-                time: moment().format('MMMM DD') + ", " + moment().format('YYYY') + " " + moment().format("hh:mm:ss"),
-                Notes: notesValue ? notesValue : "",
-                icon_color: icon_color,
-                is_income: false,
-                is_expance: true,
-                is_transfer: false,
-                is_favourite: false
-            }).then(res => {
-                expenceDetailSuccess(dispatch, Data, navigator)
-            }).catch(err => {
-                expenceDetailFail(dispatch, Data, navigator)
-            })
+                db.ref("/addNewIncome").push({
+                    newIncome: income,
+                    accountName: selected_name,
+                    categoryName: selected_cat_name,
+                    createdOnDate: todayDate,
+                    time: moment().format('MMMM DD') + ", " + moment().format('YYYY') + " " + moment().format("hh:mm:ss"),
+                    Notes: notesValue ? notesValue : "",
+                    icon_color: icon_color,
+                    is_income: false,
+                    is_expance: true,
+                    is_transfer: false,
+                    is_favourite: false
+                }).then(res => {
+                    expenceDetailSuccess(dispatch, Data, navigator, resolve, reject)
+                }).catch(err => {
+                    expenceDetailFail(dispatch, Data, navigator, resolve, reject)
+                })
 
-        }
+            }
+        })
     }
 }
-export const expenceDetailSuccess = (dispatch, Data, navigator) => {
-    dispatch({ type: EXPENCE_ADD_INCOME_DETAIL_SUCCESS, payload: "success" })
+export const expenceDetailSuccess = (dispatch, Data, navigator,resolve,reject) => {
+    resolve(dispatch({ type: EXPENCE_ADD_INCOME_DETAIL_SUCCESS, payload: "success" }))
     try {
         navigator.navigate("Home");
         navigator.reset()
     }
     catch (error) {
-        dispatch({ type: EXPENCE_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
+        reject(dispatch({ type: EXPENCE_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
     }
 }
-export const expenceDetailFail = (dispatch, Data, navigator) => {
-    dispatch({ type: EXPENCE_ADD_INCOME_DETAIL_SUCCESS, payload: "success" })
-    try {
-        navigator.navigate("Home");
-        navigator.reset()
-    }
-    catch (error) {
-        dispatch({ type: EXPENCE_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
-    }
+export const expenceDetailFail = (dispatch, Data, navigator,resolve,reject) => {
+    reject(dispatch({ type: EXPENCE_ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
 }
 
 export const updateExpanceDetail = (

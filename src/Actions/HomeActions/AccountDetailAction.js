@@ -54,21 +54,23 @@ export const selectAccountDetailDateRange=(range)=>{
 }
 export const accountDetailListFetch = () => {
     return dispatch => {
-        var items = [];
-        db.ref('/newAccount/').on('value', function (snapshot) {
-            snapshot.forEach(child => {
-                items.push({
-                    id: child.key,
-                    account_name: child.val().account_name,
-                    initial_balance: child.val().initial_balance,
-                    selected_color_icon: child.val().selected_color_icon
-                })
-                if (items != null) {
-                    dispatch({ type: ACCOUNT_DETAIL_FETCH_LIST_SUCCESS, payload: items })
-                } else {
-                    dispatch({ type: ACCOUNT_DETAIL_FETCH_LIST_FAIL, payload: "Something Wrong" })
-                }
-            });
+        return new Promise((resolve, reject) => {
+            var items = [];
+            db.ref('/newAccount/').on('value', function (snapshot) {
+                snapshot.forEach(child => {
+                    items.push({
+                        id: child.key,
+                        account_name: child.val().account_name,
+                        initial_balance: child.val().initial_balance,
+                        selected_color_icon: child.val().selected_color_icon
+                    })
+                    if (items != null) {
+                        resolve(dispatch({ type: ACCOUNT_DETAIL_FETCH_LIST_SUCCESS, payload: items }))
+                    } else {
+                        reject(dispatch({ type: ACCOUNT_DETAIL_FETCH_LIST_FAIL, payload: "Something Wrong" }))
+                    }
+                });
+            })
         })
     }
 }
@@ -92,44 +94,45 @@ export const accountDetailGetDate = (prop) => {
 
 export const accountDetailGetIncome = (account_name,from_date,to_date) => {
     return dispatch => {
-        var incomeItems = [];
-        db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).on('value', function (snapshot) {
-            if(snapshot.val()){
-                snapshot.forEach(child => {
-                    if(child.val().accountName === account_name){
-                    incomeItems.push({
-                        id: child.key,
-                        Notes: child.val().Notes,
-                        accountName: child.val().accountName,
-                        categoryName: child.val().categoryName,
-                        createdOnDate: child.val().createdOnDate,
-                        icon_color: child.val().icon_color,
-                        newIncome: child.val().newIncome,
-                        time: child.val().time,
-                        is_income: child.val().is_income,
-                        is_expance: child.val().is_expance,
-                        is_transfer: child.val().is_transfer,
-                        is_favourite: child.val().is_favourite 
-                    })
-                    return incomeItems;
-                }else{
-                    dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_FAIL, payload: null })
-                }
-                });
-                const payload={
-                    incomeItems:incomeItems,
-                    account_name:account_name
-                }
-                if (!incomeItems.length == 0) {
-                    dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_SUCCESS, payload: payload })
+        return new Promise((resolve, reject) => {
+            var incomeItems = [];
+            db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).on('value', function (snapshot) {
+                if (snapshot.val()) {
+                    snapshot.forEach(child => {
+                        if (child.val().accountName === account_name) {
+                            incomeItems.push({
+                                id: child.key,
+                                Notes: child.val().Notes,
+                                accountName: child.val().accountName,
+                                categoryName: child.val().categoryName,
+                                createdOnDate: child.val().createdOnDate,
+                                icon_color: child.val().icon_color,
+                                newIncome: child.val().newIncome,
+                                time: child.val().time,
+                                is_income: child.val().is_income,
+                                is_expance: child.val().is_expance,
+                                is_transfer: child.val().is_transfer,
+                                is_favourite: child.val().is_favourite
+                            })
+                            return incomeItems;
+                        } else {
+                            reject(dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_FAIL, payload: null }))
+                        }
+                    });
+                    const payload = {
+                        incomeItems: incomeItems,
+                        account_name: account_name
+                    }
+                    if (!incomeItems.length == 0) {
+                        resolve(dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_SUCCESS, payload: payload }))
+                    } else {
+                        reject(dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_FAIL, payload: null }))
+                    }
                 } else {
-                    dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_FAIL, payload: null })
+                    reject(dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_FAIL, payload: null }))
                 }
-        }else{
-            dispatch({ type: ACCOUNT_DETAIL_INCOME_FETCH_LIST_FAIL, payload: null})
-        }
+            })
         })
-        
     }
 }
 

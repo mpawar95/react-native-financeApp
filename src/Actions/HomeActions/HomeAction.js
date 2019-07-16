@@ -53,115 +53,90 @@ export const onPressSelectedFlatListName=(item_name,item_key)=>{
 }
 export const homeAccountListFetch = () => {
     return dispatch => {
-        var items = [];
-        var total = 0;
-        db.ref('/newAccount/').once('value', function (snapshot) {
-            snapshot.forEach(item => {
-                let response = item.val();
-                total =  parseInt(response.initial_balance) + parseInt(total);
-                return total
-            })
-            snapshot.forEach(child => {
-                items.push({
-                    id: child.key,
-                    account_name: child.val().account_name,
-                    initial_balance: child.val().initial_balance,
-                    selected_color_icon: child.val().selected_color_icon
+        return new Promise((resolve, reject) => {
+            var items = [];
+            var total = 0;
+            db.ref('/newAccount/').once('value', function (snapshot) {
+                snapshot.forEach(item => {
+                    let response = item.val();
+                    total = parseInt(response.initial_balance) + parseInt(total);
+                    return total
                 })
-                return items
-            });
-            const payload={
-                items:items,
-                total:total
-            }
-            if (items != null) {
-                dispatch({ type: HOME_ACCOUNT_FETCH_LIST_SUCCESS, payload: payload })
-            } else {
-                dispatch({ type: HOME_ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" })
-            }
+                snapshot.forEach(child => {
+                    items.push({
+                        id: child.key,
+                        account_name: child.val().account_name,
+                        initial_balance: child.val().initial_balance,
+                        selected_color_icon: child.val().selected_color_icon
+                    })
+                    return items
+                });
+                const payload = {
+                    items: items,
+                    total: total
+                }
+                if (items != null) {
+                    resolve(dispatch({ type: HOME_ACCOUNT_FETCH_LIST_SUCCESS, payload: payload }))
+                } else {
+                    reject(dispatch({ type: HOME_ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" }))
+                }
+            })
         })
     }
 }
 
 export const getIncome = (from_date, to_date) => {
-        return dispatch => {
-       
-        db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).on('value', function (snapshot) {
-            if (snapshot.val()) {
-                var incomeItems = [];
-                snapshot.forEach(child => {
-                    incomeItems.push({
-                        id: child.key,
-                        Notes: child.val().Notes,
-                        accountName: child.val().accountName,
-                        categoryName: child.val().categoryName,
-                        createdOnDate: child.val().createdOnDate,
-                        newDescription:child.val().newDescription,
-                        icon_color: child.val().icon_color,
-                        newIncome: child.val().newIncome,
-                        time: child.val().time,
-                        is_income: child.val().is_income,
-                        is_expance: child.val().is_expance,
-                        is_transfer: child.val().is_transfer,
-                        is_favourite: child.val().is_favourite
+    return dispatch => {
+        return new Promise((resolve, reject) => {
+            db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).on('value', function (snapshot) {
+                if (snapshot.val()) {
+                    var incomeItems = [];
+                    snapshot.forEach(child => {
+                        incomeItems.push({
+                            id: child.key,
+                            Notes: child.val().Notes,
+                            accountName: child.val().accountName,
+                            categoryName: child.val().categoryName,
+                            createdOnDate: child.val().createdOnDate,
+                            newDescription: child.val().newDescription,
+                            icon_color: child.val().icon_color,
+                            newIncome: child.val().newIncome,
+                            time: child.val().time,
+                            is_income: child.val().is_income,
+                            is_expance: child.val().is_expance,
+                            is_transfer: child.val().is_transfer,
+                            is_favourite: child.val().is_favourite
+                        })
+                        if (incomeItems != null) {
+                            resolve(dispatch({ type: INCOME_FETCH_LIST_SUCCESS, payload: incomeItems }))
+                        } else {
+                            reject(dispatch({ type: INCOME_FETCH_LIST_FAIL, payload: "Something Wrong" }))
+                        }
                     })
-                    if (incomeItems != null) {
-                        dispatch({ type: INCOME_FETCH_LIST_SUCCESS, payload: incomeItems })
-                    } else {
-                        dispatch({ type: INCOME_FETCH_LIST_FAIL, payload: "Something Wrong" })
-                    }
-                })
-               
-            }
-            else {
-                dispatch({ type: INCOME_FETCH_LIST_FAIL, payload: null })
-            }
+
+                }
+                else {
+                    reject(ispatch({ type: INCOME_FETCH_LIST_FAIL, payload: null }))
+                }
+            })
         })
     }
 }
 
 export const deleteIncomeDetial = (item) => {
     return dispatch => {
-        if (item.item.is_transfer) {
-            db.ref('/addNewIncome/').child(item.item.id).remove().then((success) => {
-                if (success) {
-                    dispatch({ type: DELETE_INCOME_DETAIL_SUCCESS })
-                }
-                else {
-                    dispatch({ type: DELETE_INCOME_DETAIL_FAIL })
-                }
-            })
-        }
-        else if (item.item.is_income) {
-            db.ref('/addNewIncome/').child(item.item.id).remove().then((success) => {
-                if (success) {
-                    dispatch({ type: DELETE_INCOME_DETAIL_SUCCESS })
-                }
-                else {
-                    dispatch({ type: DELETE_INCOME_DETAIL_FAIL })
-                }
-            })
-        }
-        else if (item.item.is_favourite) {
-            db.ref('/addNewIncome/').child(item.item.id).remove().then((success) => {
-                if (success) {
-                    dispatch({ type: DELETE_INCOME_DETAIL_SUCCESS })
-                }
-                else {
-                    dispatch({ type: DELETE_INCOME_DETAIL_FAIL })
-                }
-            })
-        }
-        else { 
-            db.ref('/addNewIncome/').child(item.item.id).remove().then((success) => {
-                if (success) {
-                    dispatch({ type: DELETE_INCOME_DETAIL_SUCCESS })
-                }
-                else {
-                    dispatch({ type: DELETE_INCOME_DETAIL_FAIL })
-                }
-            })
-        }
+        return new Promise((resolve, reject) => {
+            if (item.item.is_transfer || item.item.is_income || item.item.is_favourite || item.item.is_expance) {
+                db.ref('/addNewIncome/').child(item.item.id).remove().then((success) => {
+                    if (success) {
+                        resolve(dispatch({ type: DELETE_INCOME_DETAIL_SUCCESS }))
+                    }
+                    else {
+                        reject(dispatch({ type: DELETE_INCOME_DETAIL_FAIL }))
+                    }
+                })
+            }
+        })
     }
 }
 export const setOnFavorite = (item) => {
@@ -174,14 +149,16 @@ export const setOnFavorite = (item) => {
 
 export const setOnUnFavorite = (item) => {
     return dispatch => {
-        db.ref('/addNewIncome/').child(item.item.id).once('value', function (snapshot) {
-            db.ref('/addNewIncome/').child(item.item.id).update({
-                is_favourite: false
+        return new Promise((resolve, reject) => {
+            db.ref('/addNewIncome/').child(item.item.id).once('value', function (snapshot) {
+                db.ref('/addNewIncome/').child(item.item.id).update({
+                    is_favourite: false
+                })
+            }).then((success) => {
+                resolve(dispatch({ type: UNFAVORITE_ITEM_SUCCESS }))
+            }).catch(err => {
+                reject(dispatch({ type: UNFAVORITE_ITEM_FAIL }))
             })
-        }).then((success) => {
-            dispatch({ type: UNFAVORITE_ITEM_SUCCESS })
-        }).catch(err => {
-            dispatch({ type: UNFAVORITE_ITEM_FAIL })
         })
     }
 }

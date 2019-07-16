@@ -85,103 +85,103 @@ export const getPage = (page) => {
 export const getInformation = (index, from_date, to_date) => {
     
     return dispatch => {
-        var incomeItems = [];
-        var expenceItems = [];
-        db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).once('value', function (snapshot) {
-            if (snapshot.val()) {
-                snapshot.forEach(child => {
+        return new Promise((resolve, reject) => {
+            var incomeItems = [];
+            var expenceItems = [];
+            db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).once('value', function (snapshot) {
+                if (snapshot.val()) {
+                    snapshot.forEach(child => {
+                        if (index == 0) {
+                            if (child.val().is_income) {
+                                incomeItems.push({
+                                    newIncome: child.val().newIncome,
+                                    icon_color: child.val().icon_color,
+                                    is_expance: child.val().is_expance,
+                                    is_income: child.val().is_income,
+                                    accountName: child.val().accountName,
+                                    categoryName: child.val().categoryName,
+                                    createdOnDate: child.val().createdOnDate,
+                                    time: child.val().time,
+                                })
+                                return incomeItems;
+                            }
+                        } else {
+                            if (child.val().is_expance) {
+                                expenceItems.push({
+                                    newIncome: child.val().newIncome,
+                                    icon_color: child.val().icon_color,
+                                    is_expance: child.val().is_expance,
+                                    is_income: child.val().is_income,
+                                    accountName: child.val().accountName,
+                                    categoryName: child.val().categoryName,
+                                    createdOnDate: child.val().createdOnDate,
+                                    time: child.val().time,
+                                })
+                                return expenceItems;
+
+                            }
+                        }
+
+                    });
+                    var incomeBalArray = [];
+                    var incomeColorArray = [];
+                    var incommeTotal = 0
+                    var newIncomeArray = []
+                    var incomeMap = new Map();
+                    var expanceMap = new Map();
                     if (index == 0) {
-                        if (child.val().is_income) {
-                            incomeItems.push({
-                                newIncome: child.val().newIncome,
-                                icon_color: child.val().icon_color,
-                                is_expance: child.val().is_expance,
-                                is_income: child.val().is_income,
-                                accountName: child.val().accountName,
-                                categoryName: child.val().categoryName,
-                                createdOnDate: child.val().createdOnDate,
-                                time: child.val().time,
-                            })
-                            return incomeItems;
+                        for (i = 0; i < incomeItems.length; i++) {
+                            if (incomeMap.get(incomeItems[i].accountName) == null) {
+                                incomeMap.set(incomeItems[i].accountName, new structure(incomeItems[i].accountName, incomeItems[i].icon_color, incomeItems[i].newIncome))
+                            } else {
+                                var temp = incomeMap.get(incomeItems[i].accountName)
+                                temp.addIncome(incomeItems[i].newIncome)
+                            }
+                        }
+
+                        for (var value of incomeMap.values()) {
+                            incomeBalArray.push(value.incometotal)
+                            incomeColorArray.push(value.color)
+                            incommeTotal += value.incometotal
+                            newIncomeArray.push(value)
                         }
                     } else {
-                        if (child.val().is_expance) {
-                            expenceItems.push({
-                                newIncome: child.val().newIncome,
-                                icon_color: child.val().icon_color,
-                                is_expance: child.val().is_expance,
-                                is_income: child.val().is_income,
-                                accountName: child.val().accountName,
-                                categoryName: child.val().categoryName,
-                                createdOnDate: child.val().createdOnDate,
-                                time: child.val().time,
-                            })
-                            return expenceItems;
+                        for (i = 0; i < expenceItems.length; i++) {
+                            if (expanceMap.get(expenceItems[i].accountName) == null) {
+                                expanceMap.set(expenceItems[i].accountName, new structure(expenceItems[i].accountName, expenceItems[i].icon_color, expenceItems[i].newIncome))
+                            } else {
+                                var temp = expanceMap.get(expenceItems[i].accountName)
+                                temp.addIncome(expenceItems[i].newIncome)
+                            }
+                        }
 
+                        for (var value of expanceMap.values()) {
+                            incomeBalArray.push(value.incometotal)
+                            incomeColorArray.push(value.color)
+                            incommeTotal += value.incometotal
+                            newIncomeArray.push(value)
                         }
                     }
-
-                });
-                var incomeBalArray = [];
-                var incomeColorArray = [];
-                var incommeTotal = 0
-                var newIncomeArray = []
-                var incomeMap = new Map();
-                var expanceMap = new Map();
-                if (index == 0) {
-                    for (i = 0; i < incomeItems.length; i++) {
-                        if (incomeMap.get(incomeItems[i].accountName) == null) {
-                            incomeMap.set(incomeItems[i].accountName, new structure(incomeItems[i].accountName, incomeItems[i].icon_color, incomeItems[i].newIncome))
-                        } else {
-                            var temp = incomeMap.get(incomeItems[i].accountName)
-                            temp.addIncome(incomeItems[i].newIncome)
-                        }
+                    const payload = {
+                        incomeBalArray: incomeBalArray,
+                        incomeColorArray: incomeColorArray,
+                        incommeTotal: incommeTotal,
+                        newIncomeArray: newIncomeArray
                     }
-
-                    for (var value of incomeMap.values()) {
-                        incomeBalArray.push(value.incometotal)
-                        incomeColorArray.push(value.color)
-                        incommeTotal += value.incometotal
-                        newIncomeArray.push(value)
+                    if (incomeItems.length) {
+                        resolve(dispatch({ type: GET_INFORMATION_SUCCESS, payload: payload }))
+                    }
+                    else if (expenceItems.length) {
+                        resolve(dispatch({ type: GET_INFORMATION_SUCCESS, payload: payload }))
+                    }
+                    else {
+                        resolve(dispatch({ type: GET_INFORMATION_FAIL, payload: payload }))
                     }
                 } else {
-                    for (i = 0; i < expenceItems.length; i++) {
-                        if (expanceMap.get(expenceItems[i].accountName) == null) {
-                            expanceMap.set(expenceItems[i].accountName, new structure(expenceItems[i].accountName, expenceItems[i].icon_color, expenceItems[i].newIncome))
-                        } else {
-                            var temp = expanceMap.get(expenceItems[i].accountName)
-                            temp.addIncome(expenceItems[i].newIncome)
-                        }
-                    }
-
-                    for (var value of expanceMap.values()) {
-                        incomeBalArray.push(value.incometotal)
-                        incomeColorArray.push(value.color)
-                        incommeTotal += value.incometotal
-                        newIncomeArray.push(value)
-                    }
+                    reject(dispatch({ type: GET_INFORMATION_FAIL, payload: null }))
                 }
-                const payload = {
-                    incomeBalArray: incomeBalArray,
-                    incomeColorArray: incomeColorArray,
-                    incommeTotal: incommeTotal,
-                    newIncomeArray: newIncomeArray
-                }
-                if (incomeItems.length) {
-                    dispatch({ type: GET_INFORMATION_SUCCESS, payload: payload })
-                }
-                else if (expenceItems.length) {
-                    dispatch({ type: GET_INFORMATION_SUCCESS, payload: payload })
-                }
-                else{
-                    dispatch({ type: GET_INFORMATION_FAIL,payload: payload })
-                }
-            } else {
-                dispatch({ type: GET_INFORMATION_FAIL,payload: null })
-            }
-        }
-        )
-
+            })
+        })
     }
 }
 
@@ -195,25 +195,4 @@ export const statisticsScreenLoad = () => {
 }
 export const updateStatisticsMoneyIcon = (dispatch, icon) => {
     dispatch({ type: STATISTICS_SELECTED_MONEY_ICON, payload: icon })
-}
-
-export const statisticsGetAccountData = () => {
-    return dispatch => {
-        var items = [];
-        db.ref('/newAccount/').on('value', function (snapshot) {
-            snapshot.forEach(child => {
-                items.push({
-                    id: child.key,
-                    account_name: child.val().account_name,
-                    initial_balance: child.val().initial_balance,
-                    selected_color_icon: child.val().selected_color_icon
-                })
-                if (items != null) {
-                    dispatch({ type: STATISTICS_ACCOUNT_FETCH_LIST_SUCCESS, payload: items })
-                } else {
-                    dispatch({ type: STATISTICS_ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" })
-                }
-            });
-        })
-    }
 }

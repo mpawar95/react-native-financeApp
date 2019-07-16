@@ -17,38 +17,41 @@ export const receivePropsAccountLoad=()=>{
 }
 export const accountListFetch = () => {
     return dispatch => {
-        var items = [];
-        var total=0
-        db.ref('/newAccount/').once('value', function (snapshot) {
-            snapshot.forEach(item => {
-                let response = item.val();
-                total =  parseInt(response.initial_balance) + parseInt(total);
-                return total
-            })
-            
-            if (snapshot.val()) {
-                snapshot.forEach(child => {
-                    items.push({
-                        id: child.key,
-                        account_name: child.val().account_name,
-                        initial_balance: child.val().initial_balance,
-                        selected_color_icon: child.val().selected_color_icon,
-                        selected_color_index:child.val().selected_color_index
-                    })
-                    return items
+        return new Promise((resolve, reject) => {
+            var items = [];
+            var total = 0
+            db.ref('/newAccount/').once('value', function (snapshot) {
+                snapshot.forEach(item => {
+                    let response = item.val();
+                    total = parseInt(response.initial_balance) + parseInt(total);
+                    return total
                 })
 
-            }
-            const payload={
-                items:items,
-                total:total
-            }
-            if (items != null) {
-                dispatch({ type: ACCOUNT_FETCH_LIST_SUCCESS, payload: payload })
-            } else {
-                dispatch({ type: ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" })
-            }
-        });
+                if (snapshot.val()) {
+                    snapshot.forEach(child => {
+                        items.push({
+                            id: child.key,
+                            account_name: child.val().account_name,
+                            initial_balance: child.val().initial_balance,
+                            selected_color_icon: child.val().selected_color_icon,
+                            selected_color_index: child.val().selected_color_index
+                        })
+                        return items
+                    })
+
+                }
+                const payload = {
+                    items: items,
+                    total: total
+                }
+                if (items != null) {
+                    resolve(dispatch({ type: ACCOUNT_FETCH_LIST_SUCCESS, payload: payload }))
+                } else {
+                    reject(dispatch({ type: ACCOUNT_FETCH_LIST_FAIL, payload: "Something Wrong" }))
+                }
+            });
+        })
+        
     }
 }
 
