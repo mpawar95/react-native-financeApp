@@ -111,62 +111,57 @@ export const addIncomeDetail = (
     selected_key
 ) => {
     return dispatch => {
-        return new Promise((resolve, reject) => {
-            return setTimeout(function () {
-                if (!income && !selected_name && !selected_cat_name && !todayDate) {
-                    reject(dispatch({ type: ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
-                } else {
-                    let Data = {
-                        newIncome: income,
-                        accountName: selected_name,
-                        categoryName: selected_cat_name,
-                        createdOnDate: todayDate,
-                        time: moment().format('MMMM DD') + ", " + moment().format('YYYY'),
-                        Notes: notesValue
-                    }
-                    db.ref('/newAccount/').child(selected_key).once('value', function (snapshot) {
-                        db.ref('/newAccount/').child(selected_key).update({
-                            initial_balance: parseInt(snapshot.val().initial_balance) + parseInt(income)
-                        })
-                    })
-
-                    db.ref("/addNewIncome").push({
-                        newIncome: income,
-                        accountName: selected_name,
-                        categoryName: selected_cat_name,
-                        createdOnDate: todayDate,
-                        time: moment().format('MMMM DD') + ", " + moment().format('YYYY') + " " + moment().format("hh:mm:ss"),
-                        Notes: notesValue ? notesValue : "",
-                        icon_color: icon_color,
-                        is_income: true,
-                        is_expance: false,
-                        is_transfer: false,
-                        is_favourite: false
-                    }).then(res => {
-                        incomeDetailSuccess(dispatch, Data, navigator,resolve, reject)
-                    }).catch(err => {
-                        incomeDetailFail(dispatch, Data, navigator,resolve, reject)
-                    })
-
-                }
+        if (!income && !selected_name && !selected_cat_name && !todayDate) {
+            dispatch({ type: ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
+        } else {
+            let Data = {
+                newIncome: income,
+                accountName: selected_name,
+                categoryName: selected_cat_name,
+                createdOnDate: todayDate,
+                time: moment().format('MMMM DD') + ", " + moment().format('YYYY'),
+                Notes: notesValue
+            }
+            db.ref('/newAccount/').child(selected_key).once('value', function (snapshot) {
+                db.ref('/newAccount/').child(selected_key).update({
+                    initial_balance: parseInt(snapshot.val().initial_balance) + parseInt(income)
+                })
             })
-        }, 1000)
+
+            db.ref("/addNewIncome").push({
+                newIncome: income,
+                accountName: selected_name,
+                categoryName: selected_cat_name,
+                createdOnDate: todayDate,
+                time: moment().format('MMMM DD') + ", " + moment().format('YYYY') + " " + moment().format("hh:mm:ss"),
+                Notes: notesValue ? notesValue : "",
+                icon_color: icon_color,
+                is_income: true,
+                is_expance: false,
+                is_transfer: false,
+                is_favourite: false
+            }).then(res => {
+                incomeDetailSuccess(dispatch, Data, navigator)
+            }).catch(err => {
+                incomeDetailFail(dispatch, Data, navigator)
+            })
+        }
     }
 }
-export const incomeDetailSuccess = (dispatch, Data, navigator,resolve, reject) => {
+export const incomeDetailSuccess = (dispatch, Data, navigator) => {
     
-    resolve(dispatch({ type: ADD_INCOME_DETAIL_SUCCESS, payload: "success" }))
+    dispatch({ type: ADD_INCOME_DETAIL_SUCCESS, payload: "success" })
 
     try {
         navigator.navigate("Home");
         navigator.reset()
     }
     catch (error) {
-        reject(dispatch({ type: ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
+       dispatch({ type: ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
     }
 }
-export const incomeDetailFail = (dispatch, Data, navigator,resolve, reject) => {
-    reject(dispatch({ type: ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" }))
+export const incomeDetailFail = (dispatch, Data, navigator) => {
+    dispatch({ type: ADD_INCOME_DETAIL_FAIL, payload: "Something Wrong" })
 }
 
 
