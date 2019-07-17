@@ -128,19 +128,6 @@ export const deleteIncomeDetial = (item) => {
     return dispatch => {
         return new Promise((resolve, reject) => {
             if (item.item.is_transfer || item.item.is_income || item.item.is_favourite || item.item.is_expance) {
-                db.ref('/newAccount/').child(item.item.selected_key).once('value', function (snapshot) {
-                    console.log(snapshot.val())
-                    if(item.item.is_income){
-                        db.ref('/newAccount/').child(item.item.selected_key).update({
-                            initial_balance : parseInt(snapshot.val().initial_balance) - parseInt(item.item.newIncome)
-                        })
-                    }
-                    else if(item.item.is_expance){
-                        db.ref('/newAccount/').child(item.item.selected_key).update({
-                            initial_balance : parseInt(snapshot.val().initial_balance) + parseInt(item.item.newIncome)
-                        })
-                    }
-                })
                 db.ref('/addNewIncome/').child(item.item.id).remove().then((success) => {
                     if (success) {
                         resolve(dispatch({ type: DELETE_INCOME_DETAIL_SUCCESS }))
