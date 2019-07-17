@@ -105,7 +105,8 @@ export const getIncome = (from_date, to_date) => {
                             is_income: child.val().is_income,
                             is_expance: child.val().is_expance,
                             is_transfer: child.val().is_transfer,
-                            is_favourite: child.val().is_favourite
+                            is_favourite: child.val().is_favourite,
+                            selected_key:child.val().selected_key
                         })
                         if (incomeItems != null) {
                             resolve(dispatch({ type: INCOME_FETCH_LIST_SUCCESS, payload: incomeItems }))
@@ -116,7 +117,7 @@ export const getIncome = (from_date, to_date) => {
 
                 }
                 else {
-                    reject(ispatch({ type: INCOME_FETCH_LIST_FAIL, payload: null }))
+                    reject(dispatch({ type: INCOME_FETCH_LIST_FAIL, payload: null }))
                 }
             })
         })
@@ -127,6 +128,19 @@ export const deleteIncomeDetial = (item) => {
     return dispatch => {
         return new Promise((resolve, reject) => {
             if (item.item.is_transfer || item.item.is_income || item.item.is_favourite || item.item.is_expance) {
+                db.ref('/newAccount/').child(item.item.selected_key).once('value', function (snapshot) {
+                    console.log(snapshot.val())
+                    if(item.item.is_income){
+                        db.ref('/newAccount/').child(item.item.selected_key).update({
+                            initial_balance : parseInt(snapshot.val().initial_balance) - parseInt(item.item.newIncome)
+                        })
+                    }
+                    else if(item.item.is_expance){
+                        db.ref('/newAccount/').child(item.item.selected_key).update({
+                            initial_balance : parseInt(snapshot.val().initial_balance) + parseInt(item.item.newIncome)
+                        })
+                    }
+                })
                 db.ref('/addNewIncome/').child(item.item.id).remove().then((success) => {
                     if (success) {
                         resolve(dispatch({ type: DELETE_INCOME_DETAIL_SUCCESS }))

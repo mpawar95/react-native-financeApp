@@ -139,7 +139,8 @@ export const addIncomeDetail = (
                 is_income: true,
                 is_expance: false,
                 is_transfer: false,
-                is_favourite: false
+                is_favourite: false,
+                selected_key:selected_key
             }).then(res => {
                 incomeDetailSuccess(dispatch, Data, navigator)
             }).catch(err => {

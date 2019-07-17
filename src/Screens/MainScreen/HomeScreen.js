@@ -90,7 +90,6 @@ class HomeScreen extends React.Component {
     this.props.homeScreenLoad()
   }
   _renderItem = (item) => {
-
     return (
       <View key={item.item.id}>
         <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("AccountDetail", { item: item })}>

@@ -29,7 +29,8 @@ import {
     statisticsDateRangePicker,
     selectStatisticsDateRange,
     selectedItemIndex,
-    firststatisticsScreenLoad
+    firststatisticsScreenLoad,
+    setDate
 } from '../../Actions'
 import { styles } from '../../Style/StatisticsStyles';
 import PieChart from 'react-native-pie-chart';
@@ -75,6 +76,7 @@ class StatisticsScreen extends Component {
         this.props.navigation.setParams({ navigator: navigation })
         this.props.getPage("Income")
         this.props.getInformation(0, convertMyDate(today), convertMyDate(today))
+        this.props.setDate(convertMyDate(today), convertMyDate(today))
         this.props.getStatiscticsDate({ prop: "today" })
         this.props.statisticsScreenLoad()
     }
@@ -87,6 +89,7 @@ class StatisticsScreen extends Component {
         if (prop.prop == "today") {
             this.refs.dropdown_2.select(-1);
             this.props.getInformation(this.props.selectedIndex, convertMyDate(today), convertMyDate(today))
+            this.props.setDate(convertMyDate(today), convertMyDate(today))
             this.props.onPressStatisticsItem(false)
             this.props.selectStatisticsDateRange("")
             this.props.onPressStatisticsSelectedName("", "")
@@ -97,6 +100,7 @@ class StatisticsScreen extends Component {
         } else {
             this.refs.dropdown_2.select(-1);
             this.props.getInformation(this.props.selectedIndex, convertMyDate(yesterday), convertMyDate(yesterday))
+            this.props.setDate(convertMyDate(yesterday), convertMyDate(yesterday))
             this.props.onPressStatisticsItem(false)
             this.props.selectStatisticsDateRange("")
             this.props.onPressStatisticsSelectedName("", "")
@@ -117,12 +121,16 @@ class StatisticsScreen extends Component {
         this.props.selectStatisticsDateRange("")
         if (value == "Week") {
           this.props.getInformation(this.props.selectedIndex,convertMyDate(from_week), convertMyDate(to_week))
+          this.props.setDate(convertMyDate(from_week), convertMyDate(to_week))
+          
         }
         else if (value == "Month") {
           this.props.getInformation(this.props.selectedIndex,convertMyDate(from_month), convertMyDate(to_month))
+          this.props.setDate(convertMyDate(from_month), convertMyDate(to_month))
         }
         else if (value == "Year") {
           this.props.getInformation(this.props.selectedIndex,convertMyDate(from_year), convertMyDate(to_year))
+          this.props.setDate(convertMyDate(from_year), convertMyDate(to_year))
         }
       }
     selectionList = () => {
@@ -234,8 +242,8 @@ class StatisticsScreen extends Component {
         this.props.selectedItemIndex(index)
 
         this.props.selectedIndex === 0 ?
-            this.props.getInformation(1, convertMyDate(today), convertMyDate(today)) :
-            this.props.getInformation(0, convertMyDate(today), convertMyDate(today))
+            this.props.getInformation(1, convertMyDate(this.props.from_date), convertMyDate(this.props.to_date)) :
+            this.props.getInformation(0, convertMyDate(this.props.from_date), convertMyDate(this.props.to_date))
     }
     onDateChange(date, type) {
         this.props.onPressStatisticsSelectedName("", "")
@@ -255,6 +263,7 @@ class StatisticsScreen extends Component {
         this.props.onPressStatisticsItem(false)
         this.props.selectStatisticsDateRange(convertDateForUI(startDate) + " - " + convertDateForUI(endDate))
         this.props.getInformation(this.props.selectedIndex, convertMyDate(startDate), convertMyDate(endDate))
+        this.props.setDate(convertMyDate(startDate), convertMyDate(endDate))
         this.props.onPressStatisticsSelectedName("", "")
     }
     renderDatePickerDialog = () => {
@@ -375,7 +384,9 @@ const mapStateToProps = ({ statistics }) => {
         selectedFlatListName,
         dialogVisible,
         selectedDate,
-        selectedIndex
+        selectedIndex,
+        from_date,
+        to_date
     } = statistics;
     return {
         is_flatList_visible,
@@ -397,6 +408,8 @@ const mapStateToProps = ({ statistics }) => {
         dialogVisible,
         selectedDate,
         selectedIndex,
+        from_date,
+        to_date
     };
 }
 export default connect(mapStateToProps, {
@@ -410,5 +423,6 @@ export default connect(mapStateToProps, {
     statisticsDateRangePicker,
     selectStatisticsDateRange,
     selectedItemIndex,
-    firststatisticsScreenLoad
+    firststatisticsScreenLoad,
+    setDate
 })(StatisticsScreen);

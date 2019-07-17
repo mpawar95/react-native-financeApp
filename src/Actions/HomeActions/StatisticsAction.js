@@ -17,7 +17,8 @@ import {
     STATISTICS_DATE_RANGE_PICKER,
     STATISTICS_SELECTED_RANGE,
     STATISTICS_CHANGE_INDEX,
-    STATISTIC_SCREEN_LOAD
+    STATISTIC_SCREEN_LOAD,
+    SET_DEFAULT_DATE
 } from '../../Actions/HomeActions/types';
 import { db } from '../../utils/firebaseConfig';
 
@@ -31,6 +32,13 @@ class structure {
     addIncome = (income) => {
         this.incometotal += parseInt(income)
     }
+}
+export const setDate =(from_date, to_date)=>{
+    const payload={
+        from_date:from_date,
+        to_date:to_date
+    }
+    return { type : SET_DEFAULT_DATE, payload:payload}
 }
 export const firststatisticsScreenLoad = () => {
     return { type: STATISTIC_SCREEN_LOAD }

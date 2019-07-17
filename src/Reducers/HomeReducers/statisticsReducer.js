@@ -14,7 +14,8 @@ import {
 	STATISTICS_DATE_RANGE_PICKER,
 	STATISTICS_SELECTED_RANGE,
 	STATISTICS_CHANGE_INDEX,
-	STATISTIC_SCREEN_LOAD
+	STATISTIC_SCREEN_LOAD,
+	SET_DEFAULT_DATE
 } from '../../Actions/HomeActions/types'
 import { Color } from '../../utils/Colors';
 const INITIAL_STATE = {
@@ -46,7 +47,9 @@ const INITIAL_STATE = {
 	dialogVisible:false,
 	selectedDate:"",
 	selectedIndex:0,
-	selectedFlatListName:""
+	selectedFlatListName:"",
+	from_date:"",
+	to_date:""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -55,6 +58,12 @@ export default (state = INITIAL_STATE, action) => {
 			return {...state, ...INITIAL_STATE}
 		case STATISTICS_SELECTED_MONEY_ICON:
 			return {...state, selected_money_icon:action.payload} 
+		case SET_DEFAULT_DATE:
+			return {
+				...state,
+				from_date:action.payload.from_date,
+				to_date:action.payload.to_date
+			}
 		case STATISTICS_FLATLIST_VISIBLITY:
 			return { ...state, is_flatList_visible: action.payload }
 		case STATISTICS_CHANGE_INDEX:
