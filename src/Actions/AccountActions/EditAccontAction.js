@@ -10,7 +10,9 @@ import {
     EDIT_ACCOUNT_ITEM_SELECTED
 } from '../../Actions/AccountActions/types';
 import { db } from '../../utils/firebaseConfig';
-
+import {
+    accountdeletesuccess
+} from '../AccountActions/AccountAction'
 export const editAccountInputChange=(text)=>{
     return { type: EDIT_ACCOUNT_INPUT_CHANGE, payload: text }
 }
@@ -78,10 +80,11 @@ updateFail = (dispatch, navigation, resolve, reject) => {
 }
 
 
-export const deleteAccount=(id,navigation)=>{
+export const deleteAccount=(item,navigation,totalAmount)=>{
     return dispatch=>{
-        db.ref('/newAccount/').child(id).remove()    
-        navigation.pop()   
+        db.ref('/newAccount/').child(item.id).remove()
+        accountdeletesuccess(dispatch,item.id,item.initial_balance,totalAmount)
+        navigation.pop()
     }
 }
 export const deleteSuccess=(dispatch,navigation)=>{

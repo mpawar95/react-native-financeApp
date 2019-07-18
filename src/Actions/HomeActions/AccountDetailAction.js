@@ -15,7 +15,8 @@ import {
     ACCOUNT_FLATLIST_ITEM_SELECTED,
     ACCOUNT_SELECTED_RANGE,
     ACCOUNT_ITEM_FLATLIST_SELECTED,
-    SET_ACCOUNT_NAME
+    SET_ACCOUNT_NAME,
+    ACCOUNT_DETAIL_SET_DEFAULT_DATE
 } from '../../Actions/HomeActions/types';
 import { db } from '../../utils/firebaseConfig'
 
@@ -39,6 +40,13 @@ export const accountDetailScreenLoad = () => {
 export const setPreviousAccountName=(name)=>{
 
     return {type : SET_ACCOUNT_NAME, payload:name }
+}
+export const accountDetailSetDate = (from_date, to_date) => {
+    const payload = {
+        from_date: from_date,
+        to_date: to_date
+    }
+    return { type: ACCOUNT_DETAIL_SET_DEFAULT_DATE, payload: payload }
 }
 export const setNextAccountName=(name)=>{
 
@@ -99,7 +107,7 @@ export const accountDetailGetIncome = (account_name,from_date,to_date) => {
             db.ref('/addNewIncome/').orderByChild("createdOnDate").startAt(from_date).endAt(to_date).on('value', function (snapshot) {
                 if (snapshot.val()) {
                     snapshot.forEach(child => {
-                        if (child.val().accountName === account_name) {
+                        if (child.val().accountName === account_name || child.val().from_account === account_name || child.val().to_account === account_name) {
                             incomeItems.push({
                                 id: child.key,
                                 Notes: child.val().Notes,
@@ -108,6 +116,9 @@ export const accountDetailGetIncome = (account_name,from_date,to_date) => {
                                 createdOnDate: child.val().createdOnDate,
                                 icon_color: child.val().icon_color,
                                 newIncome: child.val().newIncome,
+                                from_account:child.val().from_account,
+                                to_account:child.val().to_account,
+                                newDescription:child.val().newDescription,
                                 time: child.val().time,
                                 is_income: child.val().is_income,
                                 is_expance: child.val().is_expance,

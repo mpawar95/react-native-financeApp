@@ -58,9 +58,9 @@ class CategorieScreen extends Component {
       return (
         <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate("EditCategory",{item:item})}>
           <View style={{ flex: 1, flexDirection: "row", marginLeft: 10 }}>
-            <View style={{ margin: 5 }}><Icon name={item.item.selected_Icon} size={32} /></View>
+            <View style={{ margin: 5 }}><Icon name={item.item.selected_Icon} size={32} color={Color.LIGHT_FONT_COLOR}/></View>
             <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 5 }}>
-              <Text style={{}}>{item.item.category_name} </Text>
+              <Text style={{color:Color.LIGHT_FONT_COLOR}}>{item.item.category_name} </Text>
             </View>
           </View>
         </TouchableWithoutFeedback>

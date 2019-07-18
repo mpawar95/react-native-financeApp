@@ -12,7 +12,9 @@ import {
 } from '../../Actions/AddNewAccountActions/types';
 import { Expressions } from '../../utils/expression';
 import { db } from '../../utils/firebaseConfig';
-
+import {
+    addlocalData
+} from '../AccountActions/AccountAction'
 export const onPressNewAccountSelectedItem=(item_key,item_color)=>{
     const payload={
         item_key:item_key,
@@ -43,7 +45,7 @@ export const onBalanceInputChange = (text) => {
 }
 
 
-export const addNewAccount = (acc_name, init_bal, selected_color, selected_index,navigator) => {
+export const addNewAccount = (acc_name, init_bal, selected_color, selected_index,navigator,totalAmount) => {
     return dispatch => {
         let data = [
             {
@@ -59,6 +61,7 @@ export const addNewAccount = (acc_name, init_bal, selected_color, selected_index
             selected_color_index:selected_index,
             time: moment().format('hh:mm:ss a'),
         }).then((response) => {
+            addlocalData(dispatch,totalAmount)
             createAccountSuccess(dispatch, data, navigator)
         }).catch((error) => {
             dispatch({ type: CREATE_NEW_ACCOUNT_FAIL ,payload: error })

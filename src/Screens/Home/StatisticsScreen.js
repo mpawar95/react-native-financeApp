@@ -327,13 +327,13 @@ class StatisticsScreen extends Component {
                         {this.renderDataView()}
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: 'space-around', marginTop: 10 }}>
                             <View style={{ flexDirection: "column", }}>
-                                <Text style={{ alignSelf: 'center' }}>{this.props.selected_money_icon ? this.props.selected_money_icon : "$"}{this.props.incomeTotal}</Text>
-                                <Text>
+                                <Text style={{ alignSelf: 'center',color:Color.PRIMARY,fontWeight:"700",fontSize:18 }}>{this.props.account_name == null? "" :this.props.selected_money_icon ? this.props.selected_money_icon : "$"}{this.props.account_name == null? "" :this.props.incomeTotal}</Text>
+                                <Text style={{color:Color.LIGHT_FONT_COLOR,marginTop:5}}>
                                     {
-                                        this.props.selectedFlatListName == "Week" ? week :
-                                            this.props.selectedFlatListName == "Month" ? month :
-                                                this.props.selectedFlatListName == "Year" ? year :
-                                                    this.props.selectedDate ? this.props.selectedDate :
+                                        this.props.selectedFlatListName == "Week" ? `${convertDateForUI(from_week)} \n${convertDateForUI(to_week)}` :
+                                            this.props.selectedFlatListName == "Month" ? `${convertDateForUI(from_month)} \n${convertDateForUI(to_month)}` :
+                                                this.props.selectedFlatListName == "Year" ? `${convertDateForUI(from_year)} \n${convertDateForUI(to_year)}` :
+                                                    this.props.selectedDate ? `${convertDateForUI(this.props.from_date)} \n${convertDateForUI(this.props.to_date)}` :
                                                         this.props.is_yesterday ? convertDateForUI(yesterday) :
                                                             this.props.date
                                     }
@@ -345,6 +345,11 @@ class StatisticsScreen extends Component {
                                         data={this.props.account_name}
                                         renderItem={this.renderItem}
                                         keyExtractor={item => item.color}
+                                        ListFooterComponent={(
+                                            this.props.account_name == null? 
+                                            <View><Text style={{color:Color.LIGHT_FONT_COLOR}}>No Statistics</Text></View>
+                                            : <View></View>
+                                        )}
                                     />
                                 </ScrollView>
                             </View>

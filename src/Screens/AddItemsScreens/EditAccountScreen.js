@@ -58,7 +58,8 @@ class EditAccountScreen extends Component {
     handleDelete=()=>{
         const { navigation } = this.props;
         const item=this.props.navigation.getParam("item") 
-        this.props.deleteAccount(item.id,navigation)
+        const totalAmount=this.props.navigation.getParam("totalAmount")
+        this.props.deleteAccount(item,navigation,totalAmount)
     }
     onAccountInputChange = (text) => {
         this.props.editAccountInputChange(text)

@@ -104,13 +104,15 @@ class AddNewAccountScreen extends Component {
     }
     _onSubmitData = () => {
 
+        const totalAmount=this.props.navigation.getParam("totalAmount")
         const { accountInput, balanceInput } = this.props
         this.props.addNewAccount(
             accountInput, 
             balanceInput, 
             this.props.selected_color, 
             this.props.selected_index,
-            { navigator: this.props.navigation }
+            { navigator: this.props.navigation },
+            totalAmount
         )
     }
     render() {

@@ -81,8 +81,16 @@ class EditIncomeDetailScreen extends Component {
             <Text style={{ color: Color.LIGHT_FONT_COLOR, fontSize: 10, marginTop: 3, fontWeight: "500", fontSize: 12 }}>{convertTimeForUI(item.time)} {"|"} {convertDateForUI(item.createdOnDate)}</Text>
           </View>
           <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-            <Text style={{ color: item.is_expance ? Color.RED_COLOR : item.is_income ? Color.PRIMARY : item.is_transfer ? Color.LIGHT_FONT_COLOR : Color.PRIMARY, fontSize: 18, fontWeight: "700" }}>
-              {"+ "}{this.props.selected_money_icon ? this.props.selected_money_icon : "$"}{item.newIncome}
+            <Text style={{
+              color: item.is_expance ? Color.RED_COLOR :
+                item.is_income ? Color.PRIMARY :
+                  item.is_transfer ? Color.LIGHT_FONT_COLOR :
+                    Color.PRIMARY,
+              fontSize: 18,
+              fontWeight: "700"
+            }}
+            >
+              {item.is_expance ? "- " : item.is_income ? "+ " : ""}{this.props.selected_money_icon ? this.props.selected_money_icon : "$"}{item.newIncome}
             </Text>
           </View>
         </View>

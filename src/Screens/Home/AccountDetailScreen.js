@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import {
   Text,
   View,
-  ScrollView,
   Platform,
   FlatList,
   TouchableOpacity,
@@ -29,14 +28,15 @@ import {
   onPressSelectedName,
   selectAccountDetailDateRange,
   setNextAccountName,
-  setPreviousAccountName
+  setPreviousAccountName,
+  accountDetailSetDate
 } from '../../Actions';
-import { ConfirmDialog, Dialog } from 'react-native-simple-dialogs';
+import { Dialog } from 'react-native-simple-dialogs';
 import { styles } from '../../Style/AccountDetailStyle'
 import { SwipeRow } from 'native-base';
 import { Color } from '../../utils/Colors';
 import { convertDateForUI, convertTimeForUI, convertDate, convertMyDate } from '../../utils/DateFormate'
-import { IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
+import { IndicatorViewPager } from 'rn-viewpager';
 import CalendarPicker from 'react-native-calendar-picker';
 import {
   today,
@@ -84,6 +84,7 @@ class AccountDetailScreen extends Component {
     this.props.accountDetailListFetch()
     this.props.accountDetailScreenLoad()
     this.props.accountDetailGetIncome(item.item.account_name, convertMyDate(today), convertMyDate(today))
+    this.props.accountDetailSetDate(convertMyDate(today), convertMyDate(today))
     this.props.accountDetailGetDate({ prop: "today" })
   }
   renderSeparator = () => {
@@ -102,7 +103,7 @@ class AccountDetailScreen extends Component {
     this.selectedRow = undefined;
     this.props.accountDetailGetDate(prop)
     if (prop.prop == "today") {
-      
+      this.props.accountDetailSetDate(convertMyDate(today), convertMyDate(today))
       this.refs.dropdown_2.select(-1);
       this.props.onPressSelectedItem(false)
       this.props.onPressSelectedName("", "")
@@ -118,6 +119,7 @@ class AccountDetailScreen extends Component {
       this.props.onPressSelectedItem(false)
       this.props.onPressSelectedName("", "")
       this.props.selectAccountDetailDateRange("")
+      this.props.accountDetailSetDate(convertMyDate(yesterday), convertMyDate(yesterday))
       this.setState({
         selectedStartDate: null,
         selectedEndDate: null,
@@ -138,12 +140,15 @@ class AccountDetailScreen extends Component {
     this.props.selectAccountDetailDateRange("")
     if (value == "Week") {
       this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(from_week), convertMyDate(to_week))
+      this.props.accountDetailSetDate(convertMyDate(from_week), convertMyDate(to_week))
     }
     else if (value == "Month") {
       this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(from_month), convertMyDate(to_month))
+      this.props.accountDetailSetDate(convertMyDate(from_month), convertMyDate(to_month))
     }
     else if (value == "Year") {
       this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(from_year), convertMyDate(to_year))
+      this.props.accountDetailSetDate(convertMyDate(from_year), convertMyDate(to_year))
     }
   }
   selectionList = () => {
@@ -280,7 +285,7 @@ class AccountDetailScreen extends Component {
     this.props.setPreviousAccountName(item.account_name)
     this.setState({
     }, () => {
-      this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(today), convertMyDate(today))
+      this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(this.props.from_date), convertMyDate(this.props.to_date))
       this.viewPager.setPage(index - 1)
     })
 
@@ -291,7 +296,7 @@ class AccountDetailScreen extends Component {
     this.props.setNextAccountName(item.account_name)
     this.setState({
     }, () => {
-      this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(today), convertMyDate(today))
+      this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(this.props.from_date), convertMyDate(this.props.to_date))
       this.viewPager.setPage(index + 1)
     })
 
@@ -319,6 +324,7 @@ class AccountDetailScreen extends Component {
     this.props.onPressSelectedName("", "")
     this.props.selectAccountDetailDateRange(convertDateForUI(startDate) + " - " + convertDateForUI(endDate))
     this.props.accountDetailGetIncome(this.props.selectedItem, convertMyDate(startDate), convertMyDate(endDate))
+    this.props.accountDetailSetDate(convertMyDate(startDate), convertMyDate(endDate))
   }
   renderDatePickerDialog = () => {
     const { selectedStartDate, selectedEndDate } = this.state;
@@ -447,7 +453,9 @@ const mapStateToProps = ({ accountDetail }) => {
     selectedFlatListIndex,
     data,
     selectedDate,
-    selectedItem
+    selectedItem,
+    from_date,
+    to_date
   } = accountDetail;
   return {
     selected_money_icon,
@@ -463,7 +471,9 @@ const mapStateToProps = ({ accountDetail }) => {
     selectedFlatListIndex,
     data,
     selectedDate,
-    selectedItem
+    selectedItem,
+    from_date,
+    to_date
   };
 }
 
@@ -481,6 +491,7 @@ export default connect(mapStateToProps, {
   onPressSelectedName,
   selectAccountDetailDateRange,
   setNextAccountName,
-  setPreviousAccountName
+  setPreviousAccountName,
+  accountDetailSetDate
 })(AccountDetailScreen);
 

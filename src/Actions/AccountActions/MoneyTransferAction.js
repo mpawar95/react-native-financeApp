@@ -18,6 +18,11 @@ import {
 } from '../AccountActions/types'
 import { db } from '../../utils/firebaseConfig';
 import { Expressions } from '../../utils/expression';
+import {
+    updateItemlocally
+} from '../AccountActions/AccountAction'
+
+
 export const moneyTransferScreenLoad=()=>{
     return {type :MONEY_TRANSFER_SCREEN_LOAD}
 }
@@ -109,6 +114,8 @@ export const onTransferPressItem2 = (value) => {
 export const onSubmitTransferAmount = (
     from_id,
     to_id,
+    from_account,
+    to_account,
     description,
     newDescription,
     createOnDate,
@@ -132,10 +139,13 @@ export const onSubmitTransferAmount = (
                             initial_balance: parseInt(snapshot.val().initial_balance) + parseInt(amount)
                         })
                     })
+                    updateItemlocally(dispatch,from_id,to_id,amount)
                     db.ref("/addNewIncome").push({
                         newIncome: amount,
                         accountName: description,
                         newDescription:newDescription,
+                        from_account:from_account,
+                        to_account:to_account,
                         categoryName: "Transfer",
                         createdOnDate: createOnDate,
                         time: moment().format('MMMM DD') + ", " + moment().format('YYYY') + " " + moment().format("hh:mm:ss"),
@@ -157,7 +167,7 @@ export const onSubmitTransferAmount = (
 export const transferIncomeDetailSuccess = (dispatch, navigator,resolve,reject) => {
     resolve(dispatch({ type: TANSFER_ADD_INCOME_DETAIL_SUCCESS, payload: "success" }))
     try {
-        navigator.navigate("Home");
+        navigator.pop();
         navigator.reset()
     }
     catch (error) {

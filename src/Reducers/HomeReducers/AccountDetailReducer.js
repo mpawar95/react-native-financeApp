@@ -17,7 +17,8 @@ import {
 	ACCOUNT_FLATLIST_ITEM_SELECTED,
 	ACCOUNT_SELECTED_RANGE,
 	ACCOUNT_ITEM_FLATLIST_SELECTED,
-	SET_ACCOUNT_NAME
+	SET_ACCOUNT_NAME,
+	ACCOUNT_DETAIL_SET_DEFAULT_DATE
 } from '../../Actions/HomeActions/types';
 const INITIAL_STATE = {
 	selected_money_icon: "",
@@ -32,24 +33,27 @@ const INITIAL_STATE = {
 	is_selected: false,
 	selectedFlatListName: "",
 	selectedFlatListIndex: 0,
-	// data: [
-	// 	{ select: "Week", key: 0 },
-	// 	{ select: "Month", key: 1 },
-	// 	{ select: "Year", key: 2 },
-	// ],
 	data: [
 		"Week",
 		"Month",
 		"Year",
 	],
 	selectedDate: "",
-	selectedItem:""
+	selectedItem:"",
+	from_date:"",
+    to_date:""
 };
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case ACCOUNT_DETAIL_SELECTED_MONEY_ICON:
 			return { ...state, selected_money_icon: action.payload }
+		case ACCOUNT_DETAIL_SET_DEFAULT_DATE:
+			return {
+				...state,
+				from_date:action.payload.from_date,
+				to_date:action.payload.to_date
+			}
 		case ACCOUNT_DETAIL_FETCH_LIST_SUCCESS:
 			return { ...state, accont_list: action.payload }
 		case ACCOUNT_DETAIL_FETCH_LIST_FAIL:

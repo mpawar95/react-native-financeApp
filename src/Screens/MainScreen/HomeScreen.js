@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import {
   Text,
   View,
-  ScrollView,
   Image,
   TouchableOpacity,
   FlatList,
@@ -15,7 +14,7 @@ import {
 import moment from "moment";
 import { SwipeRow } from 'native-base';
 import { Icon } from "react-native-elements";
-import { SafeAreaView , DrawerActions} from 'react-navigation';
+import { SafeAreaView } from 'react-navigation';
 import { MainHeader } from '../../Components';
 import { Color } from '../../utils/Colors';
 import { styles } from '../../Style/homeStyle';

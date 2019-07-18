@@ -37,7 +37,7 @@ class AccountScreen extends Component {
     if(item.account_name == "plusIcon"){
       return (
         <View style={{ flexDirection: "row" }}>
-          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("AddNewAccount")}>
+          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("AddNewAccount", { totalAmount: this.props.totalAmount })}>
             <View
               style={{
                 width: 100,
@@ -63,7 +63,7 @@ class AccountScreen extends Component {
     else{
       return (
         <View style={{ flexDirection: "row" }}>
-          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("EditAccount", { item: item })}>
+          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("EditAccount", { item: item, totalAmount: this.props.totalAmount })}>
             <View
               style={{
                 width: 100,

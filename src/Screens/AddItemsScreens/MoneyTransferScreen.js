@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { SafeAreaView } from 'react-navigation';
-import { Input,DatePicker,BottomButton } from '../../Components';
+import { Input, DatePicker, BottomButton } from '../../Components';
 import Ripple from 'react-native-material-ripple';
 import {
     transferAccountListFetch,
@@ -38,20 +38,20 @@ class MoneyTransferScreen extends Component {
         }
     }
     static navigationOptions = ({ navigation }) => {
-        const {params = {}} = navigation.state;
+        const { params = {} } = navigation.state;
         return {
             headerLeft: (
                 <Ripple onPress={() => params.onHandleBack()}>
-                        <View style={styles.backIcon}>
-                            <Icon name="arrow-back" size={22} />
-                        </View>
+                    <View style={styles.backIcon}>
+                        <Icon name="arrow-back" size={22} />
+                    </View>
                 </Ripple>
             ),
             title: "Transfer",
             headerTitleStyle: styles.headerTextStyle
         }
     }
-    onHandleBack=()=>{
+    onHandleBack = () => {
         this.props.moneyTransferScreenLoad()
         this.props.navigation.pop()
     }
@@ -59,18 +59,18 @@ class MoneyTransferScreen extends Component {
         this.props.navigation.setParams({ onHandleBack: this.onHandleBack })
         this.props.transferAccountListFetch()
     }
-   
-    componentDidUpdate(){
+
+    componentDidUpdate() {
     }
     onPressSelectedItem = (item) => {
         this.props.transferVisibilityList(false)
         this.props.onTransferPressItem1(true)
-        this.props.onPressMoneyTransferSelectedItem1(item.item.account_name,"home",item.item.selected_color_icon,item.item.key,item.item.id,item.index)
+        this.props.onPressMoneyTransferSelectedItem1(item.item.account_name, "home", item.item.selected_color_icon, item.item.key, item.item.id, item.index)
     }
     onPressSelectedItem2 = (item) => {
         this.props.transferVisibilityList2(false)
         this.props.onTransferPressItem2(true)
-        this.props.onPressMoneyTransferSelectedItem2(item.item.account_name,"home",item.item.selected_color_icon,item.item.key,item.item.id)
+        this.props.onPressMoneyTransferSelectedItem2(item.item.account_name, "home", item.item.selected_color_icon, item.item.key, item.item.id)
     }
     _render_Item = (item) => {
         return (
@@ -84,17 +84,17 @@ class MoneyTransferScreen extends Component {
             </View>
         )
     }
-    _render_Item2 = (item) => {        
+    _render_Item2 = (item) => {
         return (
             item.index === this.props.item_index ? <View></View> :
-            <View style={{}}>
-                <Ripple onPress={() => this.onPressSelectedItem2(item)}>
-                    <View style={{ flex: 1, padding: 14, backgroundColor: "white", flexDirection: 'row' }}>
-                        <View style={{ height: 15, width: 15, borderRadius: 15 / 2, backgroundColor: item.item.selected_color_icon, alignSelf: 'center' }}></View>
-                        <Text style={{ marginLeft: 5 }}>{item.item.account_name}</Text>
-                    </View>
-                </Ripple>
-            </View>
+                <View style={{}}>
+                    <Ripple onPress={() => this.onPressSelectedItem2(item)}>
+                        <View style={{ flex: 1, padding: 14, backgroundColor: "white", flexDirection: 'row' }}>
+                            <View style={{ height: 15, width: 15, borderRadius: 15 / 2, backgroundColor: item.item.selected_color_icon, alignSelf: 'center' }}></View>
+                            <Text style={{ marginLeft: 5 }}>{item.item.account_name}</Text>
+                        </View>
+                    </Ripple>
+                </View>
         )
     }
     renderSeparator = () => {
@@ -113,7 +113,7 @@ class MoneyTransferScreen extends Component {
             <View>
                 {
                     this.props.is_visible_flatlist ?
-                        <View style={{ height: 140, width:"100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
+                        <View style={{ height: 140, width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
                             <ScrollView>
                                 <FlatList
                                     extraData={this.props.selected_index}
@@ -135,7 +135,7 @@ class MoneyTransferScreen extends Component {
             <View>
                 {
                     this.props.is_visible_flatlist2 ?
-                        <View style={{ height: 140, width:"100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
+                        <View style={{ height: 140, width: "100%", borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, zIndex: 1, position: "absolute", backgroundColor: 'white' }}>
                             <ScrollView>
                                 <FlatList
                                     extraData={this.props.selected_index2}
@@ -173,17 +173,19 @@ class MoneyTransferScreen extends Component {
         this.handleEventsClose()
         this.props.transferNoteInputChange(text)
     }
-    handleEventsClose=()=>{
+    handleEventsClose = () => {
         this.props.transferVisibilityList(false)
         this.props.transferVisibilityList2(false)
     }
-    _onSubmitData=()=>{
+    _onSubmitData = () => {
         const { navigation } = this.props;
         this.props.onSubmitTransferAmount(
             this.props.selected_key,
             this.props.selected_key2,
-            "From "+`${this.props.selected_name}`+" >>> to "+ `${this.props.selected_name2}`,
-            "Transfer money from "+`${this.props.selected_name}`+" to "+ `${this.props.selected_name2}`,
+            this.props.selected_name,
+            this.props.selected_name2,
+            "From " + `${this.props.selected_name}` + " >>> to " + `${this.props.selected_name2}`,
+            "Transfer money from " + `${this.props.selected_name}` + " to " + `${this.props.selected_name2}`,
             this.props.todayDate,
             this.props.amount,
             Color.PRIMARY,
@@ -191,10 +193,10 @@ class MoneyTransferScreen extends Component {
             navigation
         )
     }
-    setFocus (hasFocus) {
-        this.setState({hasFocus},
+    setFocus(hasFocus) {
+        this.setState({ hasFocus },
             this.handleEventsClose()
-            );
+        );
     }
     render() {
         return (
@@ -203,94 +205,95 @@ class MoneyTransferScreen extends Component {
                     Keyboard.dismiss()
                     this.handleEventsClose()
                 }}>
-                    <View style={{ margin: 10, borderWidth: Platform.OS === "ios" ? 0.4 : 0.4,backgroundColor: this.props.is_selected1 ? this.props.selected_icon_color : Color.WHITE_COLOR,borderRadius:6,flexDirection:"column" }} onStartShouldSetResponder={(evt) => this.props.transferVisibilityList(false)}>
-                    <View style={{ margin:10}}>
-                        <TouchableOpacity onPress={() => this.onDropDownPress()}>
-                            <View style={[styles.viewStyle, { borderColor: this.props.is_selected ? Color.PRIMARY : "black", zIndex: 0 }]}>
-                                <View style={{ flexDirection: 'row', padding: 14 }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1 }}>
+                    <View style={{ margin: 10, borderWidth: Platform.OS === "ios" ? 0.4 : 0.4, backgroundColor: this.props.is_selected1 ? this.props.selected_icon_color : Color.WHITE_COLOR, borderRadius: 6, flexDirection: "column" }} onStartShouldSetResponder={(evt) => this.props.transferVisibilityList(false)}>
+                        <View style={{ margin: 10 }}>
+                            <TouchableOpacity onPress={() => this.onDropDownPress()}>
+                                <View style={[styles.viewStyle, { borderColor: this.props.is_selected ? Color.PRIMARY : "black", zIndex: 0 }]}>
+                                    <View style={{ flexDirection: 'row', padding: 14 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1 }}>
 
-                                        {
-                                            this.props.is_selected1 ? <View style={{ height: 15, width: 15, borderRadius: 15 / 2, backgroundColor: this.props.selected_icon_color }}></View>
-                                                : <Text></Text>
-                                        }
-                                        <Text style={{ color: "black", marginLeft: 5 }}>{this.props.selected_name ? this.props.selected_name : "Account"}</Text>
-                                    </View>
-                                    <View style={{ justifyContent: 'flex-end', }}>
-                                        <Icon name="home" />
+                                            {
+                                                this.props.is_selected1 ? <View style={{ height: 15, width: 15, borderRadius: 15 / 2, backgroundColor: this.props.selected_icon_color }}></View>
+                                                    : <Text></Text>
+                                            }
+                                            <Text style={{ color: "black", marginLeft: 5 }}>{this.props.selected_name ? this.props.selected_name : "Account"}</Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'flex-end', }}>
+                                            <Icon name="home" />
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                        {this.account_list1()}
+                            </TouchableOpacity>
+                            {this.account_list1()}
+                        </View>
+                        <View style={{ margin: 10, zIndex: -1 }}>
+                            <Input
+                                placeholder="Value"
+                                inputStyle={{ color: "#000", padding: Platform.OS === "ios" ? 0 : 14 }}
+                                onInputChange={(event) => this.amountChange(event.nativeEvent.text)}
+                                inputValue={this.props.amount}
+                                keyboardType="numeric"
+                                maxLength={6}
+                                onFocus={this.setFocus.bind(this, true)}
+                            />
+                        </View>
                     </View>
-                    <View style={{ margin:10,zIndex:-1 }}>
-                        <Input
-                            placeholder="Value"
-                            inputStyle={{ color: "#000", padding: Platform.OS === "ios" ? 0 : 14 }}
-                            onInputChange={(event) => this.amountChange(event.nativeEvent.text)}
-                            inputValue={this.props.amount}
-                            keyboardType="numeric"
-                            maxLength={6}
-                            onFocus={this.setFocus.bind(this, true)}
-                        />
+                    <View style={{ margin: 10, justifyContent: 'center', alignItems: 'center', zIndex: -1 }}>
+                        <Icon name="transform" color={this.props.is_selected1 && this.props.is_selected2 && this.props.amount_valid ? Color.PRIMARY : Color.LIGHT_FONT_COLOR} size={40} />
                     </View>
-                </View>
-                <View style={{margin:10,justifyContent:'center',alignItems:'center', zIndex:-1}}>
-                    <Icon name="transform" color={this.props.is_selected1 && this.props.is_selected2 && this.props.amount_valid ? Color.PRIMARY:Color.LIGHT_FONT_COLOR} size={40}/>
-                </View>
-                <View style={{ margin: 12,zIndex:-1, borderWidth: Platform.OS === "ios" ? 0.2 : 0.4,borderColor:Color.LIGHT_FONT_COLOR,borderRadius:6,flexDirection:"column",backgroundColor: this.props.is_selected2 ? this.props.selected_icon_color2 : Color.WHITE_COLOR  }}>
-                    <View style={{ margin:10, }}>
-                        <TouchableOpacity onPress={() => this.onDropDownPress2()}>
-                            <View style={[styles.viewStyle, { borderColor: this.props.is_selected ? Color.PRIMARY : "black", zIndex: 0 }]}>
-                                <View style={{ flexDirection: 'row', padding: 14 }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1 }}>
+                    <View style={{ margin: 12, zIndex: -1, borderWidth: Platform.OS === "ios" ? 0.2 : 0.4, borderColor: Color.LIGHT_FONT_COLOR, borderRadius: 6, flexDirection: "column", backgroundColor: this.props.is_selected2 ? this.props.selected_icon_color2 : Color.WHITE_COLOR }}>
+                        <View style={{ margin: 10, }}>
+                            <TouchableOpacity onPress={() => this.onDropDownPress2()}>
+                                <View style={[styles.viewStyle, { borderColor: this.props.is_selected ? Color.PRIMARY : "black", zIndex: 0 }]}>
+                                    <View style={{ flexDirection: 'row', padding: 14 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flex: 1 }}>
 
-                                        {
-                                            this.props.is_selected2 ? <View style={{ height: 15, width: 15, borderRadius: 15 / 2, backgroundColor: this.props.selected_icon_color2 }}></View>
-                                                : <Text></Text>
-                                        }
-                                        <Text style={{ color: "black", marginLeft: 5 }}>{this.props.selected_name2 ? this.props.selected_name2 : "Account"}</Text>
-                                    </View>
-                                    <View style={{ justifyContent: 'flex-end', }}>
-                                        <Icon name="home" />
+                                            {
+                                                this.props.is_selected2 ? <View style={{ height: 15, width: 15, borderRadius: 15 / 2, backgroundColor: this.props.selected_icon_color2 }}></View>
+                                                    : <Text></Text>
+                                            }
+                                            <Text style={{ color: "black", marginLeft: 5 }}>{this.props.selected_name2 ? this.props.selected_name2 : "Account"}</Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'flex-end', }}>
+                                            <Icon name="home" />
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                        {this.account_list2()}
+                            </TouchableOpacity>
+                            {this.account_list2()}
+                        </View>
+                        <View style={{ margin: 10, zIndex: -1 }}>
+                            <DatePicker
+                                style={{ width: "100%" }}
+                                date={this.props.todayDate}
+                                mode="date"
+                                format="MMMM DD, YYYY"
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                showIcon={true}
+                                iconSource={require('../../../assets/images/Header/calendarIcon.png')}
+                                onDateChange={this.onDateChange.bind(this)}
+                                onOpenModal={() => this.props.transferVisibilityList(false)}
+                            />
+                        </View>
+                        <View style={{ margin: 10, zIndex: -1 }}>
+                            <Input
+                                placeholder="Notes"
+                                inputStyle={{ color: "#000", padding: Platform.OS === "ios" ? 0 : 14 }}
+                                onInputChange={(event) => this.noteChange(event.nativeEvent.text)}
+                                inputValue={this.props.notesValue}
+                                onFocus={this.setFocus.bind(this, true)}
+                            />
+                        </View>
                     </View>
-                    <View style={{ margin:10,zIndex:-1}}>
-                        <DatePicker
-                            style={{ width: "100%" }}
-                            date={this.props.todayDate}
-                            mode="date"
-                            format="MMMM DD, YYYY"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            showIcon={true}
-                            iconSource={require('../../../assets/images/Header/calendarIcon.png')}
-                            onDateChange={this.onDateChange.bind(this)}
-                        />
-                    </View>
-                    <View style={{ margin: 10,zIndex:-1 }}>
-                        <Input
-                            placeholder="Notes"
-                            inputStyle={{ color: "#000", padding: Platform.OS === "ios" ? 0 : 14 }}
-                            onInputChange={(event) => this.noteChange(event.nativeEvent.text)}
-                            inputValue={this.props.notesValue}
-                            onFocus={this.setFocus.bind(this, true)}
-                        />
-                    </View>
-                </View>
-              
-                </View> 
-                { this.props.is_selected1 && this.props.is_selected2 && this.props.amount_valid ?
-                 <BottomButton 
-                    title="Ok"
-                    onSubmitData={this._onSubmitData}
 
-                />:<View></View>
+                </View>
+                {this.props.is_selected1 && this.props.is_selected2 && this.props.amount_valid ?
+                    <BottomButton
+                        title="Ok"
+                        onSubmitData={this._onSubmitData}
+
+                    /> : <View></View>
                 }
             </SafeAreaView>
         );
