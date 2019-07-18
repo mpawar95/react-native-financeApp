@@ -39,7 +39,7 @@ class CategorieScreen extends Component {
       ...this.state,
       selectedIndex: index,
     } ,()=> this.state.selectedIndex == 0 ?
-     this.props.getCategories("Income") :this.props.getCategories("Expence")  
+     this.props.getCategories("Income") : this.props.getCategories("Expence")  
     )
   }
   renderSeparator = () => {
@@ -56,7 +56,7 @@ class CategorieScreen extends Component {
   };
   renderPage=(item)=>{
       return (
-        <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate("EditCategory",{item:item})}>
+        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate("EditCategory", { item: item })}>
           <View style={{ flex: 1, flexDirection: "row", marginLeft: 10 }}>
             <View style={{ margin: 5 }}><Icon name={item.item.selected_Icon} size={32} color={Color.LIGHT_FONT_COLOR}/></View>
             <View style={{ justifyContent: 'center', alignContent: 'center', marginLeft: 5 }}>
@@ -110,13 +110,13 @@ const mapStateToProps = ({ categories }) => {
     category_list,
     refreshing,
     seatedPropsKey,
-    seatedPropsName
+    seatedPropsName,
   } = categories;
   return {
     category_list,
     refreshing,
     seatedPropsKey,
-    seatedPropsName
+    seatedPropsName,
   };
 }
 export default connect(mapStateToProps, {

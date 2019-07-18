@@ -11,7 +11,9 @@ import {
     EDIT_CATEGORY_HANDLE_BACK_PRESS
 } from '../CategoryActions/types';
 import { db } from '../../utils/firebaseConfig';
-
+import {
+    removeLocallyItem
+} from '../CategoryActions/CategoryAction'
 
 export const handleBackPress=()=>{
     return {type:EDIT_CATEGORY_HANDLE_BACK_PRESS}
@@ -55,6 +57,7 @@ export const editCategoryLoad=(id)=>{
 export const deleteCategory=(id,navigation)=>{
     return dispatch=>{
         db.ref('/Category/').child(id).remove()
+        removeLocallyItem(dispatch,id)
         navigation.pop()
     }
 }

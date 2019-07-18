@@ -10,7 +10,9 @@ import {
     NEW_CATEGORY_SCREEN_LOAD
 } from '../CategoryActions/types';
 import { db } from '../../utils/firebaseConfig';
-
+import {
+    addlocalCategoryData
+} from '../CategoryActions/CategoryAction'
 export const newCategoryScreenLoad=()=>{
     return { type : NEW_CATEGORY_SCREEN_LOAD }
 }
@@ -44,21 +46,20 @@ export const onPressCatSelectedItemName=(item_icon,item_key)=>{
 }
 export const addNewCategory = (cat_name, icon, cat_type_name, navigator) => {
     return dispatch => {
-        return new Promise((resolve, reject) => {
-            db.ref('/Category/').push({
-                category_name: cat_name,
-                selected_Icon: icon,
-                category_type: cat_type_name,
-            }).then((response) => {
-                createCategorySuccess(dispatch, navigator, resolve, reject)
-            }).catch((error) => {
-                rejectdispatch({ type: ADD_NEW_CATEGORY_FAIL, payload: error })
-            })
+        db.ref('/Category/').push({
+            category_name: cat_name,
+            selected_Icon: icon,
+            category_type: cat_type_name,
+        }).then((response) => {
+            addlocalCategoryData(dispatch, cat_name, icon, cat_type_name)
+            createCategorySuccess(dispatch, navigator)
+        }).catch((error) => {
+            dispatch({ type: ADD_NEW_CATEGORY_FAIL, payload: error })
         })
     }
 }
 
-export const createCategorySuccess=(dispatch,navigator,resolve, reject)=>{
-    resolve(dispatch({ type: ADD_NEW_CATEGORY_SUCCESS}))
+export const createCategorySuccess=(dispatch,navigator)=>{
+    dispatch({ type: ADD_NEW_CATEGORY_SUCCESS})
     navigator.navigator.navigate("Categories")
 }
