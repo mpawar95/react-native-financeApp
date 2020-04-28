@@ -1,9 +1,9 @@
 import firebase from 'react-native-firebase';
  let config = {
-    apiKey: "AIzaSyA-vUKW2grdxXnkRK5VGgqwekcVCl3dMy8",
+    apiKey: "firebase api key",
     authDomain: "",
-    databaseURL: "https://perify-ebc9a.firebaseio.com/",
-    projectId: "perify-ebc9a",
+    databaseURL: "firebase database url",
+    projectId: "firebase project id",
     storageBucket: "",
     messagingSenderId: ""
   };
